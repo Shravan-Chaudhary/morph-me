@@ -3,44 +3,30 @@ module.exports = {
   extends: ['@commitlint/config-conventional'],
   parserPreset: {
     parserOpts: {
-      // Updated pattern to strictly enforce type(scope): format
       headerPattern:
         /^(feat|fix|docs|style|refactor|test|chore)\((client|server|shared)\):\s+(?::\w+:\s*)?(.*)$/,
       headerCorrespondence: ['type', 'scope', 'subject'],
     },
   },
   rules: {
-    'scope-enum': [2, 'always', ['client', 'server', 'shared']],
-    'scope-empty': [2, 'never'],
+    // Requiring specific type
     'type-enum': [
       2,
       'always',
       ['feat', 'fix', 'docs', 'style', 'refactor', 'test', 'chore'],
     ],
-    'subject-case': [
-      2,
-      'never',
-      [
-        'lower-case',
-        'sentence-case',
-        'start-case',
-        'pascal-case',
-        'snake-case',
-        'kebab-case',
-      ],
-    ],
+    'type-empty': [2, 'never'],
+    'type-case': [2, 'always', 'lowerCase'],
+
+    // Requiring scope and limiting to specific values
+    'scope-enum': [2, 'always', ['client', 'server', 'shared']],
+    'scope-empty': [2, 'never'],
+    'scope-case': [2, 'always', 'lowerCase'],
+
+    // Subject formatting
     'subject-empty': [2, 'never'],
+    'subject-case': [2, 'always', ['sentence-case']],
     'subject-full-stop': [0],
-    'subject-min-length': [2, 'always', 1],
-    'subject-exclamation-mark': [2, 'never'],
-    'subject-custom': [
-      2,
-      'always',
-      {
-        pattern: /^(?::\w+:\s*)?[A-Z]/,
-        errorMessage:
-          'The first letter of the message (after any emoji) must be uppercase',
-      },
-    ],
+    'header-max-length': [2, 'always', 100],
   },
 }
