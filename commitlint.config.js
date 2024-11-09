@@ -3,7 +3,9 @@ module.exports = {
   extends: ['@commitlint/config-conventional'],
   parserPreset: {
     parserOpts: {
-      headerPattern: /^(\w*)(?:\((.*)\))?\: (?:\s*(?::\w*:\s*)?)(.*)$/,
+      // Updated pattern to strictly enforce type(scope): format
+      headerPattern:
+        /^(feat|fix|docs|style|refactor|test|chore)\((client|server|shared)\):\s+(?::\w+:\s*)?(.*)$/,
       headerCorrespondence: ['type', 'scope', 'subject'],
     },
   },
@@ -35,7 +37,7 @@ module.exports = {
       2,
       'always',
       {
-        pattern: /^(?::\w+:\s*)?[A-Z]/, // Allows optional emoji followed by capital letter
+        pattern: /^(?::\w+:\s*)?[A-Z]/,
         errorMessage:
           'The first letter of the message (after any emoji) must be uppercase',
       },
