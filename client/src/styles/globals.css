@@ -1,0 +1,162 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Soft, natural gradient for light theme */
+    --gradient: linear-gradient(
+      to top right,
+      hsl(142.1, 76.2%, 36.3%),
+      hsl(150, 70%, 80%),
+      hsl(160, 60%, 87%)
+    );
+    --gradient-orange-pink: linear-gradient(
+      to top right,
+      hsl(25, 100%, 70%),
+      hsl(340, 80%, 75%),
+      hsl(15, 100%, 85%)
+    );
+    --gradient-blue-pink: linear-gradient(
+      to top right,
+      hsl(180, 70%, 60%),
+      hsl(200, 80%, 70%),
+      hsl(220, 80%, 85%)
+    );
+
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 142.1 76.2% 36.3%;
+    --primary-foreground: 355.7 100% 97.3%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 142.1 76.2% 36.3%;
+    --radius: 0.75rem;
+    --chart-1: 142 70% 50%;
+    --chart-2: 180 60% 50%;
+    --chart-3: 25 80% 60%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 65%;
+  }
+
+  .dark {
+    /* Cozy, deeper gradient for dark theme */
+    --gradient: linear-gradient(
+      to top right,
+      hsl(142.1, 70.6%, 45.3%),
+      hsl(145, 65%, 35%),
+      hsl(148, 60%, 25%)
+    );
+    --background: 20 14.3% 4.1%;
+    --foreground: 0 0% 95%;
+    --card: 24 9.8% 10%;
+    --card-foreground: 0 0% 95%;
+    --popover: 0 0% 9%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 142.1 70.6% 45.3%;
+    --primary-foreground: 144.9 80.4% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 12 6.5% 15.1%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 85.7% 97.3%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 142.4 71.8% 29.2%;
+    --chart-1: 142 70% 50%;
+    --chart-2: 180 60% 50%;
+    --chart-3: 25 80% 60%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 65%;
+  }
+}
+
+::selection {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  background-color: hsl(var(--background));
+  border-radius: 8px;
+  scrollbar-width: thin;
+}
+
+::-webkit-scrollbar-thumb {
+  color: hsl(var(--primary));
+  background-color: hsl(var(--primary));
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: hsl(var(--background));
+}
+
+.dotPattern {
+  background-image: radial-gradient(
+    hsl(var(--primary) / 0.2) 1px,
+    transparent 1px
+  );
+  background-size: 25px 25px;
+}
+
+.use-automation-zoom-in {
+  animation: automation-zoom-in 0.5s;
+}
+
+.card-mask {
+  background: radial-gradient(
+    ellipse at center,
+    hsl(var(--primary) / 0.15),
+    transparent
+  );
+}
+
+.gradient {
+  background: conic-gradient(
+    from 230.29deg at 51.63% 52.16%,
+    hsl(var(--primary)),
+    hsl(180, 70%, 60%),
+    hsl(280, 70%, 60%),
+    hsl(220, 70%, 60%),
+    hsl(200, 70%, 60%),
+    hsl(var(--primary))
+  );
+}
+
+.bg-gradient {
+  background: var(--gradient);
+}
+
+.lamp {
+  opacity: 1;
+  transform: translateY(-200px) rotate(180deg) scale(2) translateZ(0px);
+}
+
+@keyframes automation-zoom-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
