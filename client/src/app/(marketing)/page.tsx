@@ -4,7 +4,7 @@ import AnimatedShinyText from '@/components/ui/animated-shiny-text'
 import { BorderBeam } from '@/components/ui/border-beam'
 import { Button } from '@/components/ui/button'
 import SectionBadge from '@/components/ui/section-badge'
-import { perks } from '@/constants'
+import { features, process } from '@/constants'
 import { ArrowRight, ChevronRight } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -49,7 +49,7 @@ const HomePage = () => {
               {/* Gradient */}
               {/* previous classes: absolute top-1/2 left-1/2 -z-10 gradient w-3/4 -translate-x-1/2 -translate-y-1/2 h-3/4 inset-0 blur-[10rem] */}
               <div className='absolute top-1/2 left-1/2 -z-10 gradient w-3/4 -translate-x-1/2 -translate-y-1/2 h-3/4 inset-0 blur-[10rem]'></div>
-              <div className='hidden md:inline-flex relative bg-white/0 px-4 py-10 rounded-2xl w-full h-full border-none  '>
+              <div className='hidden md:inline-flex relative bg-white/0 py-10 rounded-2xl w-full h-full border-none  '>
                 <Image
                   src='/assets/hero-image.svg'
                   alt='sample-image'
@@ -72,10 +72,10 @@ const HomePage = () => {
         </Container>
       </Wrapper>
 
-      {/* Features */}
-      <Wrapper className='flex flex-col items-center justify-center py-12 relative'>
+      {/* Process */}
+      <Wrapper className='max-w-6xl flex flex-col items-center justify-center px-4 md:px-2 py-12 relative'>
         <Container>
-          <div className='max-w-md mx-auto text-start md:text-center'>
+          <div className='max-w-md px-2 md:mx-auto text-start md:text-center'>
             <SectionBadge title='The Process' />
             <h2 className='text-3xl lg:text-4xl font-semibold mt-6'>
               Three steps to build you a new face
@@ -88,7 +88,7 @@ const HomePage = () => {
         <Container>
           <div className='flex flex-col items-center justify-center py-10 md:py-20 w-full'>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full divide-x-0 md:divide-x divide-y md:divide-y-0 divide-gray-900 lg:first:border-none first:border-gray-900'>
-              {perks.map((perk) => (
+              {process.map((perk) => (
                 <div
                   key={perk.title}
                   className='flex flex-col items-start px-4 py-4 md:px-6 lg:px-8 lg:py-6'
@@ -104,6 +104,67 @@ const HomePage = () => {
               ))}
             </div>
           </div>
+        </Container>
+      </Wrapper>
+
+      {/* Features */}
+      <Wrapper className='max-w-6xl flex flex-col items-center justify-center px-4 md:px-2 py-12 relative'>
+        <Container>
+          <div className='max-w-md md:mx-auto text-start md:text-center'>
+            <SectionBadge title='Features' />
+            <h2 className='text-3xl lg:text-4xl font-semibold mt-6'>
+              Powerful Features, Simple Design
+            </h2>
+            <p className='text-muted-foreground mt-6'>
+              Transform you photos with powerful AI technology - no complex
+              prompts needed.
+            </p>
+          </div>
+        </Container>
+        <Container>
+          <div className='flex items-center justify-center mx-auto mt-8'></div>
+        </Container>
+        <Container>
+          <div className='flex flex-col items-center justify-center py-10 md:py-20 w-full'>
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full gap-8'>
+              {features.map((feature) => (
+                <div
+                  key={feature.title}
+                  className='bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow'
+                >
+                  <div className='bg-gray-50 w-16 h-16 rounded-full flex items-center justify-center mb-4'>
+                    {feature.icon && (
+                      <feature.icon className='w-8 h-8 text-neutral-800' />
+                    )}
+                  </div>
+                  <h3 className='text-lg font-semibold mb-2'>
+                    {feature.title}
+                  </h3>
+                  <p className='text-muted-foreground text-sm'>
+                    {feature.info}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Container>
+      </Wrapper>
+
+      {/* Pricing */}
+      <Wrapper className='max-w-6xl flex flex-col items-center justify-center py-12 relative'>
+        <Container>
+          <div className='max-w-md md:mx-auto text-start md:text-center'>
+            <SectionBadge title='Pricing' />
+            <h2 className='text-3xl lg:text-4xl font-semibold mt-6'>
+              Simple Pricing for Everyone
+            </h2>
+            <p className='text-muted-foreground mt-6'>
+              Credits based pricing for all your transformation needs.
+            </p>
+          </div>
+        </Container>
+        <Container className='flex items-center justify-center'>
+          <div className=''></div>
         </Container>
       </Wrapper>
     </section>
