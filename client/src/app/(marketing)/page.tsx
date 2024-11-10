@@ -1,4 +1,5 @@
 import { Container, Wrapper } from '@/components'
+import SpellcastingLoader from '@/components/global/spell-casting-loader'
 import { AnimatedShinyPill } from '@/components/ui/animated-shiny-pill'
 import AnimatedShinyText from '@/components/ui/animated-shiny-text'
 import { BorderBeam } from '@/components/ui/border-beam'
@@ -11,15 +12,19 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import Marquee from '@/components/ui/marquee'
 import SectionBadge from '@/components/ui/section-badge'
-import { features, pricingCards, process } from '@/constants'
+import { features, pricingCards, process, reviews } from '@/constants'
 import { cn } from '@/lib/utils'
-import { ArrowRight, ChevronRight, Zap } from 'lucide-react'
+import { ArrowRight, ChevronRight, User, Zap } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
 const HomePage = () => {
+  const firstRow = reviews.slice(0, reviews.length / 2)
+  const secondRow = reviews.slice(reviews.length / 2)
+
   return (
     <section className='w-full relative flex flex-col items-center justify-center px-4 md:px-0 py-8'>
       {/* Hero */}
@@ -223,9 +228,80 @@ const HomePage = () => {
       {/* Testimonials */}
       <Wrapper className='max-w-6xl flex flex-col items-center justify-center py-12 relative'>
         <Container>
-          <div className=''></div>
+          <div className='max-w-md md:mx-auto text-start md:text-center'>
+            <SectionBadge title='The Buzz' />
+            <h2 className='text-3xl lg:text-4xl font-serif mt-6'>
+              What people are saying
+              {/* Morphed & Loving It */}
+            </h2>
+            <p className='text-muted-foreground mt-6'>
+              From hilarious to mind-blowing - hear what our morphers have to
+              say.
+            </p>
+          </div>
+        </Container>
+        <Container>
+          <div className='py-10 md:py-20 w-full'>
+            <div className='relative flex h-full w-full flex-col items-center justify-center overflow-hidden py-10'>
+              <Marquee pauseOnHover className='[--duration:20s] select-none'>
+                {firstRow.map((review) => (
+                  <figure
+                    key={review.name}
+                    className='relative w-64 cursor-pointer overflow-hidden rounded-xl border p-4 border-zinc-500/[.1] bg-background hover:bg-zinc-500/[.15]'
+                  >
+                    <div className='flex flex-row items-center gap-2'>
+                      <User className='w-6 h-6' />
+                      <div className='flex flex-col'>
+                        <figcaption className='text-sm font-medium'>
+                          {review.name}
+                        </figcaption>
+                        <p className='text-xs font-medium text-muted-foreground'>
+                          {review.username}
+                        </p>
+                      </div>
+                    </div>
+                    <blockquote className='mt-2 text-sm'>
+                      {review.body}
+                    </blockquote>
+                  </figure>
+                ))}
+              </Marquee>
+              <Marquee
+                reverse
+                pauseOnHover
+                className='[--duration:20s] select-none'
+              >
+                {secondRow.map((review) => (
+                  <figure
+                    key={review.name}
+                    className='relative w-64 cursor-pointer overflow-hidden rounded-xl border p-4 border-zinc-500/[.1] bg-background hover:bg-zinc-500/[.15]'
+                  >
+                    <div className='flex flex-row items-center gap-2'>
+                      <User className='w-6 h-6' />
+                      <div className='flex flex-col'>
+                        <figcaption className='text-sm font-medium'>
+                          {review.name}
+                        </figcaption>
+                        <p className='text-xs font-medium text-muted-foreground'>
+                          {review.username}
+                        </p>
+                      </div>
+                    </div>
+                    <blockquote className='mt-2 text-sm'>
+                      {review.body}
+                    </blockquote>
+                  </figure>
+                ))}
+              </Marquee>
+              {/* Fade */}
+              <div className='pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-background'></div>
+              <div className='pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-background'></div>
+            </div>
+          </div>
         </Container>
       </Wrapper>
+
+      {/* Newsletter */}
     </section>
   )
 }
