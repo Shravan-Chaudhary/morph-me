@@ -10,20 +10,22 @@ const Navbar = async () => {
         <div className='flex items-start'>
           <Link href='/' className='flex items-center gap-2'>
             <Icons.logo className='w-8 h-8' />
-            <span className='text-lg font-medium'>MorphMe</span>
+            <span className='text-lg font-medium hover:text-neutral-800 '>
+              MorphMe
+            </span>
           </Link>
         </div>
 
         <nav className='hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform'>
           <ul className='flex items-center justify-center gap-8'>
             <li className='hover:text-foreground/80 text-sm'>
-              <Link href='#'>Pricing</Link>
+              <Link href='#process'>Process</Link>
             </li>
             <li className='hover:text-foreground/80 text-sm'>
-              <Link href='#'>Features</Link>
+              <Link href='#features'>Features</Link>
             </li>
             <li className='hover:text-foreground/80 text-sm'>
-              <Link href='#'>Morph</Link>
+              <Link href='#pricing'>Pricing</Link>
             </li>
           </ul>
         </nav>

@@ -13,9 +13,12 @@ const Footer = () => {
         <div className='flex flex-col items-start justify-start md:max-w-[200px]'>
           <div className='flex items-start'>
             <Icons.logo className='w-7 h-7' />
+            <p className='text-neutral-800 font-medium ml-2 pt-[2px]'>
+              MorphMe
+            </p>
           </div>
           <p className='text-muted-foreground mt-4 text-sm text-start'>
-            Build beautiful, functional websites, without writing code
+            Transform Your Face in Seconds with AI Magic.
           </p>
           <span className='mt-4 text-neutral-800 text-sm flex items-center'>
             Created by Shravan 👾
