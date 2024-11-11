@@ -1,7 +1,9 @@
 import { SITE_CONFIG } from '@/config'
 import { cn } from '@/lib/utils'
 import '@/styles/globals.css'
+import { GoogleOAuthProvider } from '@react-oauth/google'
 import { Inter } from 'next/font/google'
+import { OAuthProvider } from './providers/googleOauthProvider'
 
 const font = Inter({ subsets: ['latin'] })
 export const metadata = SITE_CONFIG
@@ -19,7 +21,7 @@ export default function RootLayout({
           font.className,
         )}
       >
-        {children}
+        <OAuthProvider>{children}</OAuthProvider>
       </body>
     </html>
   )
