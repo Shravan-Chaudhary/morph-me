@@ -124,7 +124,7 @@ const HomePage = () => {
           <div className='max-w-md md:mx-auto text-start md:text-center'>
             <SectionBadge title='Features' />
             <h2 className='text-3xl lg:text-4xl font-semibold mt-6'>
-              Powerful Features, Simple Design
+              Powerful Transformation, Streamlined Experience
             </h2>
             <p className='text-muted-foreground mt-6'>
               Transform you photos with powerful AI technology - no complex
@@ -167,10 +167,11 @@ const HomePage = () => {
           <div className='max-w-md md:mx-auto text-start md:text-center'>
             <SectionBadge title='Pricing' />
             <h2 className='text-3xl lg:text-4xl font-semibold mt-6'>
-              Simple Pricing for Everyone
+              Flexible Morphing, No strings Attached
             </h2>
             <p className='text-muted-foreground mt-6'>
-              Credits based pricing for all your transformation needs.
+              Say goodbye to subscription traps. With credits system you pay as
+              you go.
             </p>
           </div>
         </Container>

@@ -3,11 +3,11 @@ import { Metadata } from 'next'
 export const SITE_CONFIG: Metadata = {
   title: {
     // write a default title for astra a ai powered website builder suggest something unique and catchy don't use the same words of ai powered website builder give a unique name
-    default: 'MorphMe - AI Powered Face Transformation ',
+    default: 'MorphMe - Effortless AI-Powered Transformations',
     template: `%s | MorphMe`,
   },
   description:
-    'MorphMe is an AI powered face morphing tool that helps you create a face morphing photos in Seconds. No overenginered prompts required. Get started for free!',
+    "Unleash your creativity with Morph-Me's intuitive AI tools. No lengthy prompts, just simple clicks to morph your images into captivating 3D clay, game-like, and other unique styles.",
   icons: {
     icon: [
       {

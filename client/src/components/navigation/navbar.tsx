@@ -1,6 +1,7 @@
 import { Button, buttonVariants } from '@/components/ui/button'
 import Link from 'next/link'
 import Icons from '../global/icons'
+import { Zap } from 'lucide-react'
 
 const Navbar = async () => {
   const user = false
@@ -10,7 +11,7 @@ const Navbar = async () => {
         <div className='flex items-start'>
           <Link href='/' className='flex items-center gap-2'>
             <Icons.logo className='w-8 h-8' />
-            <span className='text-lg font-medium hover:text-neutral-800 '>
+            <span className='text-lg font-medium hover:text-neutral-800'>
               MorphMe
             </span>
           </Link>
@@ -37,9 +38,10 @@ const Navbar = async () => {
             <>
               <Link
                 href='/sign-in'
-                className={buttonVariants({ size: 'sm', variant: 'ghost' })}
+                className={buttonVariants({ size: 'sm', variant: 'outline' })}
               >
-                Get Started
+                <span className='mr-2'>Get Started</span>
+                <Zap className='w-4 h-4 fill-primary text-primary' />
               </Link>
             </>
           )}

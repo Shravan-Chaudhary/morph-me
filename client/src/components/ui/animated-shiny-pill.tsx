@@ -3,7 +3,7 @@ import AnimatedShinyText from './animated-shiny-text'
 import { cn } from '@/lib/utils'
 import { BorderBeam } from './border-beam'
 
-export async function AnimatedShinyPill() {
+export function AnimatedShinyPill() {
   return (
     <div className='z-10 flex items-center justify-center'>
       <div
