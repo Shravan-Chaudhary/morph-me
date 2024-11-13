@@ -2,9 +2,11 @@
 
 import React from 'react'
 import Link from 'next/link'
+import { ChevronLeft, Home } from 'lucide-react'
 import { ArrowLeft } from 'lucide-react'
 import LoginCard from '../_components/login-card'
 import { Container, Wrapper } from '@/components'
+import { Button } from '@/components/ui/button'
 
 export default function Component() {
   return (
@@ -14,11 +16,20 @@ export default function Component() {
           <div className='w-full max-w-md relative'>
             <Link
               href='/'
-              className='absolute -top-8 right-3 inline-flex items-center text-sm text-muted-foreground hover:text-green-600 transition-colors duration-300'
+              className='absolute -top-8 right-3 flex items-center text-sm text-muted-foreground hover:text-green-600 transition-colors duration-300'
             >
-              <ArrowLeft className='w-4 h-4 mr-1' />
-              Home
+              <Button variant='link'>
+                <ChevronLeft
+                  className='me-1 opacity-60'
+                  size={16}
+                  strokeWidth={2}
+                  aria-hidden='true'
+                />
+                Home
+                <Home className='size-4 ml-1 mb-[2px]' />
+              </Button>
             </Link>
+
             <LoginCard />
           </div>
         </Container>
