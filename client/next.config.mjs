@@ -1,13 +1,22 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: [
-      'utfs.io',
-      'img.clerk.com',
-      'subdomain',
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'subdomain',
+      },
+      {
+        protocol: 'https',
+        hostname: 'morph-me.s3.ap-south-1.amazonaws.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'replicate.delivery',
+      },
     ],
   },
   reactStrictMode: false,
-};
+}
 
-export default nextConfig;
+export default nextConfig
