@@ -19,8 +19,8 @@ import { Download, Share2 } from 'lucide-react'
 const MorphPage = () => {
   const handleTransform = async () => {
     const image_url =
-      'https://morph-me.s3.ap-south-1.amazonaws.com/1731476199284800300.webp'
-    const style = 'clay'
+      'https://morph-me.s3.ap-south-1.amazonaws.com/1731492696406466800.jpeg'
+    const style = 'Emoji'
     try {
       const res = await fetch('http://localhost:8080/morph', {
         method: 'POST',
@@ -35,8 +35,43 @@ const MorphPage = () => {
         console.error('Error response:', errorText)
         return
       }
-      const data = await res.json()
-      console.log(data)
+      const { status, prediction_id } = await res.json()
+      console.log('Prediction ID:', prediction_id)
+
+      // Poll the status of the prediction
+      const checkStatus = async (prediction_id: string) => {
+        try {
+          const response = await fetch(
+            `http://localhost:8080/predictions/${prediction_id}`,
+            {
+              method: 'GET',
+            },
+          )
+
+          if (!response.ok) {
+            console.error('Response status:', response.status)
+            const errorText = await response.text()
+            console.error('Error response:', errorText)
+            return
+          }
+
+          const prediction = await response.json()
+          console.log('Prediction status:', prediction.status)
+
+          if (prediction.status === 'succeeded') {
+            console.log('Processing complete:', prediction.output)
+            // Handle the completed prediction
+          } else if (prediction.status === 'failed') {
+            console.error('Processing failed:', prediction.error)
+          } else {
+            // Continue polling
+            setTimeout(() => checkStatus(prediction_id), 2000) // Poll every 2 seconds
+          }
+        } catch (error) {
+          console.error('Error checking status:', error)
+        }
+      }
+      setTimeout(() => checkStatus(prediction_id), 16000)
     } catch (error) {
       console.error(error)
     }
