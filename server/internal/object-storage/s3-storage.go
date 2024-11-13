@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"io"
 	"mime/multipart"
 	"path/filepath"
 	"time"
@@ -22,7 +23,7 @@ type S3Storage struct {
 }
 
 func NewS3Storage(bucket string, region string, access_key string, secret_key string) (*S3Storage, error) {
-	// create new s3 client here and pass it to the S3Storage struct
+	// create new s3 client with creds
 	creds := credentials.NewStaticCredentialsProvider(access_key, secret_key, "")
 	cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion(region), config.WithCredentialsProvider(creds))
 	if err != nil {
@@ -47,7 +48,7 @@ func (s *S3Storage) UploadFile(file *multipart.FileHeader) (string, error) {
 
 	// Read the file
 	buffer := make([]byte, file.Size)
-	if _, err := src.Read(buffer); err != nil {
+	if _, err := io.ReadFull(src, buffer); err != nil {
 		return "", fmt.Errorf("error while reading file: %v", err)
 	}
 
