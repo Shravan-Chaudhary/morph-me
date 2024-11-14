@@ -16,18 +16,16 @@ export default function Component() {
           <div className='w-full max-w-md relative'>
             <Link
               href='/'
-              className='absolute -top-8 right-3 flex items-center text-sm text-muted-foreground hover:text-green-600 transition-colors duration-300'
+              className='absolute -top-8 right-3 flex items-center text-sm text-muted-foreground hover:text-neutral-800 transition-colors duration-300'
             >
-              <Button variant='link'>
-                <ChevronLeft
-                  className='me-1 opacity-60'
-                  size={16}
-                  strokeWidth={2}
-                  aria-hidden='true'
-                />
-                Home
-                <Home className='size-4 ml-1 mb-[2px]' />
-              </Button>
+              <ChevronLeft
+                className='me-1 opacity-60'
+                size={16}
+                strokeWidth={2}
+                aria-hidden='true'
+              />
+              Home
+              <Home className='size-4 ml-1 mb-[2px]' />
             </Link>
 
             <LoginCard />

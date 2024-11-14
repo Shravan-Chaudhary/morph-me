@@ -1,3 +1,4 @@
 {
-  "conventionalCommits.scopes": ["client", "server", "shared"]
+  "conventionalCommits.scopes": ["client", "server", "shared"],
+  "todo-tree.tree.scanMode": "workspace"
 }

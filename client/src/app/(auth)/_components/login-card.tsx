@@ -7,21 +7,34 @@ import { Separator } from '@/components/ui/separator'
 import { ArrowRight, Fingerprint } from 'lucide-react'
 import { Icons } from '@/components'
 import { useGoogleLogin } from '@react-oauth/google'
-import axios from 'axios'
+import auth from '@/actions/auth'
+import { useToast } from '@/components/hooks/use-toast'
 
 const LoginCard = () => {
+  const { toast } = useToast()
   const login = useGoogleLogin({
     onSuccess: async (token) => {
-      console.log(token.code)
-      const res = await axios.get(
-        `http://localhost:8080/auth/google/callback?code=${token.code}`,
-      )
-      console.log('from golagn:', res.data)
+      const res = await auth(token.code)
+      if (res.type === 'error') {
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: 'Error Loggin in. Please try again.',
+        })
+        return
+      }
+      console.log('Logged in successfully')
     },
     onError: (error) => {
       console.error(error)
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Error Loggin in. Please try again.',
+      })
     },
     flow: 'auth-code',
+    ux_mode: 'popup',
   })
 
   return (
@@ -80,6 +93,19 @@ const LoginCard = () => {
           </a>
         </p>
       </CardFooter>
+      <Button
+        onClick={async () => {
+          const res = await fetch('http://localhost:8080/self')
+          if (!res.ok) {
+            console.log('Error')
+            return
+          }
+          const data = await res.json()
+          console.log(data)
+        }}
+      >
+        Self
+      </Button>
     </Card>
   )
 }
