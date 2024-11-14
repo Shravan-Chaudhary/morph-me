@@ -106,7 +106,9 @@ func main() {
 	router.GET("/auth/google/callback", googleHandler.GoogleCallBackHandler)
 	router.POST("/users", userHandler.HandleCreateUser)
 	router.POST("/upload", uploadHandler.Upload)
-	router.GET("/predictions/:prediction_id", getPredictionStatus)
+	router.GET("/predictions/:prediction_id", func (c *gin.Context) {
+		getPredictionStatus(c, &config)
+	})
 	router.POST("/predictions", func(c *gin.Context) {
 		var req ProcessRequest
         if err := c.ShouldBindJSON(&req); err != nil {
@@ -120,7 +122,7 @@ func main() {
             "prompt":            "person",
             "negative_prompt":    "boring",
             "prompt_strength":    4.5,
-            "denoising_strength": 1.0,
+            "denoising_strength": 1,
             "instant_id_strength": 0.8,
         }
 	 // Run the model and wait for output
@@ -145,14 +147,14 @@ func main() {
 	s := server.NewServer(":8080", router)
 	s.Start()
 }
-func getPredictionStatus(c *gin.Context) {
+func getPredictionStatus(c *gin.Context, config *util.Config) {
     url := "https://api.replicate.com/v1/predictions/" + c.Param("prediction_id")
     req, err := http.NewRequest("GET", url, nil)
     if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
         return
     }
-    req.Header.Set("Authorization", "Token r8_Vj5ZKpItjNXFNKvYLPgliAhzI4Uv7gB2vlSfV")
+	req.Header.Set("Authorization", "Token " + config.REPLICATE_TOKEN)
 
     resp, err := http.DefaultClient.Do(req)
     if err != nil {
