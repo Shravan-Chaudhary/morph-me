@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"fmt"
+	"io"
 	"log"
 	"log/slog"
 	"morph-me/internal/database"
@@ -11,10 +13,12 @@ import (
 	storage "morph-me/internal/object-storage"
 	"morph-me/internal/server"
 	"morph-me/internal/util"
+	"net/http"
 	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/replicate/replicate-go"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 )
@@ -51,11 +55,17 @@ func main() {
 	}
 	slog.Info("Connected to MongoDB")
 
+	// Replicate Client
+    r8, err := replicate.NewClient(replicate.WithToken("r8_Vj5ZKpItjNXFNKvYLPgliAhzI4Uv7gB2vlSfV"))
+    if err != nil {
+        log.Fatalf("Failed to create Replicate client: %v", err)
+    }
+
 	// Router
 	router := gin.Default()
 	corsconfig := cors.DefaultConfig()
-	corsconfig.AllowOrigins = []string{"http://localhost:3000"}
-	corsconfig.AllowMethods = []string{"GET", "POST", "OPTIONS"}
+	corsconfig.AllowOrigins = []string{"http://localhost:3000", "http://localhost:5173"}
+	corsconfig.AllowMethods = []string{"GET", "POST", "OPTIONS", "PUT", "PATCH", "DELETE"}
 	corsconfig.AllowHeaders = []string{
 		"Origin",
 		"Content-Type",
@@ -85,16 +95,81 @@ func main() {
 	userService := service.NewUserService(userRespository)
 	userHandler := handler.NewUserHandler()
 	googleHandler := handler.NewGoogleOAuthHandler(userService, googleOauthConfig)
-	morphHandler := handler.NewMorphHandler(s3Storage)
+	uploadHandler := handler.NewUploadHandler(s3Storage)
 
 
 	// Routes
+	type ProcessRequest struct {
+    	ImageUrl string  `json:"image_url" binding:"required"`
+    	Style    string  `json:"style" binding:"required"`
+	}
 	router.GET("/auth/google/callback", googleHandler.GoogleCallBackHandler)
 	router.POST("/users", userHandler.HandleCreateUser)
-	router.POST("/morph", morphHandler.Morph)
+	router.POST("/upload", uploadHandler.Upload)
+	router.GET("/predictions/:prediction_id", getPredictionStatus)
+	router.POST("/predictions", func(c *gin.Context) {
+		var req ProcessRequest
+        if err := c.ShouldBindJSON(&req); err != nil {
+            c.JSON(400, gin.H{"error": err.Error()})
+            return
+        }
+
+		input := replicate.PredictionInput{
+            "image":              req.ImageUrl,
+            "style":             req.Style,
+            "prompt":            "person",
+            "negative_prompt":    "boring",
+            "prompt_strength":    4.5,
+            "denoising_strength": 1.0,
+            "instant_id_strength": 0.8,
+        }
+	 // Run the model and wait for output
+	//  version := "fofr/face-to-many:a07f252abbbd832009640b27f063ea52d87d7a23a185ca165bec23b5adc8deaf"
+        prediction, err := r8.CreatePrediction(c.Request.Context(), "a07f252abbbd832009640b27f063ea52d87d7a23a185ca165bec23b5adc8deaf", input,nil, false) // nil webhook since we're waiting
+        if err != nil {
+            c.JSON(500, gin.H{
+                "error": "Processing failed",
+                "details": err.Error(),
+            })
+            return
+        }
+		fmt.Println(prediction.ID)
+
+        // Return the processed image URLs
+        c.JSON(200, gin.H{
+            "status": "success",
+            "prediction_id": prediction.ID,
+        })
+	})
 
 	s := server.NewServer(":8080", router)
 	s.Start()
+}
+func getPredictionStatus(c *gin.Context) {
+    url := "https://api.replicate.com/v1/predictions/" + c.Param("prediction_id")
+    req, err := http.NewRequest("GET", url, nil)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        return
+    }
+    req.Header.Set("Authorization", "Token r8_Vj5ZKpItjNXFNKvYLPgliAhzI4Uv7gB2vlSfV")
+
+    resp, err := http.DefaultClient.Do(req)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        return
+    }
+    defer resp.Body.Close()
+
+    body, err := io.ReadAll(resp.Body)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        return
+    }
+
+    c.Writer.Header().Set("Content-Type", "application/json")
+    c.Writer.WriteHeader(resp.StatusCode)
+    c.Writer.Write(body)
 }
 
 
