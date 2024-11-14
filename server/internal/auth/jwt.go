@@ -7,7 +7,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-func SignJWT(user *model.User) (string, error) {
+func SignJWT(jwtSecret string, user *model.User) (string, error) {
 	const (
 		THIRTY_DAYS = 30 * 24 * time.Hour
 	)

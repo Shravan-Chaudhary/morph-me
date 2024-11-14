@@ -14,12 +14,14 @@ import (
 type GoogleOAuthHandler struct {
 	userService *service.UserService
 	googleOauthConfig *oauth2.Config
+	jwtSecret string
 }
 
-func NewGoogleOAuthHandler(userService *service.UserService, googleOauthConfig *oauth2.Config) *GoogleOAuthHandler {
+func NewGoogleOAuthHandler(userService *service.UserService, googleOauthConfig *oauth2.Config, jwtSecret string) *GoogleOAuthHandler {
 	return &GoogleOAuthHandler{
 		userService: userService,
 		googleOauthConfig: googleOauthConfig,
+		jwtSecret: jwtSecret,
 	}
 }
 
@@ -49,15 +51,22 @@ func (h *GoogleOAuthHandler) GoogleCallBackHandler(c *gin.Context) {
 		return
 	}
 
-	signedToken, err := auth.SignJWT(user)
+	signedToken, err := auth.SignJWT(h.jwtSecret, user)
 	if err != nil {
 		fmt.Println("Error signing JWT", err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	// TODO: Set JWT as HttpOnly cookie
+	c.SetCookie(
+		"accessToken",
+		signedToken,
+		2592000, //  MaxAge (30 days)
+		"/", // Path
+		"", // Domain
+		true, // Secure
+		true, // HttpOnly
+	)
 	// TODO: Redirect to frontend
 	c.JSON(http.StatusOK, gin.H{"token": signedToken, "user": user})
-	c.Redirect(http.StatusTemporaryRedirect, "http://localhost:5173/dashboard")
-
 }

@@ -94,7 +94,7 @@ func main() {
 	}
 	userService := service.NewUserService(userRespository)
 	userHandler := handler.NewUserHandler()
-	googleHandler := handler.NewGoogleOAuthHandler(userService, googleOauthConfig)
+	googleHandler := handler.NewGoogleOAuthHandler(userService, googleOauthConfig, config.JWT_SECRET)
 	uploadHandler := handler.NewUploadHandler(s3Storage)
 
 
@@ -174,6 +174,7 @@ func getPredictionStatus(c *gin.Context, config *util.Config) {
     c.Writer.Write(body)
 }
 
+// TODO: Implement credit checkig system
 
 
 
