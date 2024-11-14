@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 import Upload from './components/upload'
 import { Container, Icons, Wrapper } from '@/components'
 import {
@@ -15,8 +15,12 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Download, Share2 } from 'lucide-react'
+import { useToast } from '@/components/hooks/use-toast'
 
 const MorphPage = () => {
+  const [error, setError] = useState<string | null>(null)
+  const { toast } = useToast()
+
   const handleTransform = async () => {
     const image_url =
       'https://morph-me.s3.ap-south-1.amazonaws.com/1731492696406466800.jpeg'
@@ -33,6 +37,12 @@ const MorphPage = () => {
         console.error('Response status:', res.status)
         const errorText = await res.text()
         console.error('Error response:', errorText)
+        setError(errorText)
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: errorText,
+        })
         return
       }
       const { status, prediction_id } = await res.json()
@@ -52,6 +62,12 @@ const MorphPage = () => {
             console.error('Response status:', response.status)
             const errorText = await response.text()
             console.error('Error response:', errorText)
+            setError(errorText)
+            toast({
+              variant: 'destructive',
+              title: 'Error',
+              description: errorText,
+            })
             return
           }
 
@@ -63,19 +79,43 @@ const MorphPage = () => {
             // Handle the completed prediction
           } else if (prediction.status === 'failed') {
             console.error('Processing failed:', prediction.error)
+            setError(prediction.error)
+            toast({
+              variant: 'destructive',
+              title: 'Processing Failed',
+              description: prediction.error,
+            })
           } else {
             // Continue polling
             setTimeout(() => checkStatus(prediction_id), 2000) // Poll every 2 seconds
           }
         } catch (error) {
           console.error('Error checking status:', error)
+          const errorMessage =
+            error instanceof Error ? error.message : 'An unknown error occurred'
+          setError(errorMessage)
+          toast({
+            variant: 'destructive',
+            title: 'Error',
+            description: errorMessage,
+          })
         }
       }
       setTimeout(() => checkStatus(prediction_id), 16000)
     } catch (error) {
       console.error(error)
+      const errorMessage =
+        error instanceof Error ? error.message : 'An unknown error occurred'
+
+      setError(errorMessage)
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: errorMessage,
+      })
     }
   }
+
   return (
     <section className='w-full relative flex flex-col items-center justify-center px-4 md:px-0 py-8'>
       <Wrapper className='max-w-6xl flex flex-col items-center justify-center px-4 md:px-2 py-6 relative'>
@@ -98,7 +138,7 @@ const MorphPage = () => {
                     <SelectItem value='apple'>3D</SelectItem>
                     <SelectItem value='banana'>Clay</SelectItem>
                     <SelectItem value='blueberry'>Video Game</SelectItem>
-                    <SelectItem value='grapes'>Pixel</SelectItem>
+                    <SelectItem value='grapes'>Pixels</SelectItem>
                     <SelectItem value='pineapple'>Emoji</SelectItem>
                   </SelectGroup>
                 </SelectContent>

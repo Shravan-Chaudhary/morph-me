@@ -4,6 +4,7 @@ import '@/styles/globals.css'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import { Inter } from 'next/font/google'
 import { OAuthProvider } from './providers/googleOauthProvider'
+import { Toaster } from '@/components/ui/toaster'
 
 const font = Inter({ subsets: ['latin'] })
 export const metadata = SITE_CONFIG
@@ -22,6 +23,7 @@ export default function RootLayout({
         )}
       >
         <OAuthProvider>{children}</OAuthProvider>
+        <Toaster />
       </body>
     </html>
   )
