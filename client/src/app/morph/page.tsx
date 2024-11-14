@@ -36,7 +36,7 @@ const MorphPage = () => {
     if (!uploadedImageUrl || !selectedStyle) return
 
     try {
-      const res = await fetch('http://localhost:8080/morph', {
+      const res = await fetch('http://localhost:8080/predictions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -54,7 +54,7 @@ const MorphPage = () => {
         toast({
           variant: 'destructive',
           title: 'Error',
-          description: errorText,
+          description: "Couldn't process the image. Please try again.",
         })
         return
       }
@@ -79,7 +79,7 @@ const MorphPage = () => {
             toast({
               variant: 'destructive',
               title: 'Error',
-              description: errorText,
+              description: 'Server error occurred. Please try again.',
             })
             return
           }
@@ -111,7 +111,7 @@ const MorphPage = () => {
           toast({
             variant: 'destructive',
             title: 'Error',
-            description: errorMessage,
+            description: 'Server error occurred. Please try again.',
           })
         }
       }
@@ -125,7 +125,7 @@ const MorphPage = () => {
       toast({
         variant: 'destructive',
         title: 'Error',
-        description: errorMessage,
+        description: 'Server error occurred. Please try again.',
       })
     }
   }
