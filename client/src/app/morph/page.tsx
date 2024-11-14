@@ -19,6 +19,7 @@ import Upload from './components/upload'
 
 const MorphPage = () => {
   const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState<boolean>(false)
   const [selectedStyle, setSelectedStyle] = useState<string>('')
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string>('')
   const [processedImageUrl, setProcessedImageUrl] = useState<string>('')
@@ -34,6 +35,7 @@ const MorphPage = () => {
 
   const handleTransform = async () => {
     if (!uploadedImageUrl || !selectedStyle) return
+    setLoading(true)
 
     try {
       const res = await fetch('http://localhost:8080/predictions', {
@@ -90,6 +92,7 @@ const MorphPage = () => {
           if (prediction.status === 'succeeded') {
             console.log('Processing complete:', prediction.output)
             setProcessedImageUrl(prediction.output[0])
+            setLoading(false)
             // Handle the completed prediction
           } else if (prediction.status === 'failed') {
             console.error('Processing failed:', prediction.error)
@@ -115,7 +118,7 @@ const MorphPage = () => {
           })
         }
       }
-      setTimeout(() => checkStatus(prediction_id), 16000)
+      setTimeout(() => checkStatus(prediction_id), 15000)
     } catch (error) {
       console.error(error)
       const errorMessage =
@@ -165,7 +168,7 @@ const MorphPage = () => {
                   onClick={handleTransform}
                   size='lg'
                   className='rounded-full px-6 w-full max-w-sm md:max-w-[200px]'
-                  disabled={!uploadedImageUrl || !selectedStyle}
+                  disabled={!uploadedImageUrl || !selectedStyle || loading}
                 >
                   <span className='text-base'>Transform</span>
 
