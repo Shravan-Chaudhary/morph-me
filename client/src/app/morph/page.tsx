@@ -1,7 +1,7 @@
 'use client'
-import React, { useState } from 'react'
-import Upload from './components/upload'
 import { Container, Icons, Wrapper } from '@/components'
+import { useToast } from '@/components/hooks/use-toast'
+import { Button } from '@/components/ui/button'
 import {
   Select,
   SelectContent,
@@ -11,27 +11,40 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import Link from 'next/link'
-import Image from 'next/image'
-import { Button, buttonVariants } from '@/components/ui/button'
 import { Download, Share2 } from 'lucide-react'
-import { useToast } from '@/components/hooks/use-toast'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useState } from 'react'
+import Upload from './components/upload'
 
 const MorphPage = () => {
   const [error, setError] = useState<string | null>(null)
+  const [selectedStyle, setSelectedStyle] = useState<string>('')
+  const [uploadedImageUrl, setUploadedImageUrl] = useState<string>('')
+  const [processedImageUrl, setProcessedImageUrl] = useState<string>('')
   const { toast } = useToast()
 
+  const handleUploadComplete = (url: string) => {
+    setUploadedImageUrl(url)
+  }
+
+  const handleUploadDelete = () => {
+    setUploadedImageUrl('')
+  }
+
   const handleTransform = async () => {
-    const image_url =
-      'https://morph-me.s3.ap-south-1.amazonaws.com/1731492696406466800.jpeg'
-    const style = 'Emoji'
+    if (!uploadedImageUrl || !selectedStyle) return
+
     try {
       const res = await fetch('http://localhost:8080/morph', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ image_url, style }),
+        body: JSON.stringify({
+          image_url: uploadedImageUrl,
+          style: selectedStyle,
+        }),
       })
       if (!res.ok) {
         console.error('Response status:', res.status)
@@ -76,6 +89,7 @@ const MorphPage = () => {
 
           if (prediction.status === 'succeeded') {
             console.log('Processing complete:', prediction.output)
+            setProcessedImageUrl(prediction.output[0])
             // Handle the completed prediction
           } else if (prediction.status === 'failed') {
             console.error('Processing failed:', prediction.error)
@@ -117,7 +131,7 @@ const MorphPage = () => {
   }
 
   return (
-    <section className='w-full relative flex flex-col items-center justify-center px-4 md:px-0 py-8'>
+    <section className='w-full relative flex flex-col items-center justify-center px-4 md:px-0 py-10 md:mb-10'>
       <Wrapper className='max-w-6xl flex flex-col items-center justify-center px-4 md:px-2 py-6 relative'>
         <Container>
           <div className='w-full mx-auto grid grid-cols-1 md:grid-cols-10 gap-5'>
@@ -126,20 +140,23 @@ const MorphPage = () => {
               <h2 className='text-neutral-500 font-semibold text-base md:text-lg'>
                 Upload your Photo or Selfie
               </h2>
-              <Upload />
+              <Upload
+                onUploadComplete={handleUploadComplete}
+                onDelete={handleUploadDelete}
+              />
               {/* TODO: On lg screen use icons */}
-              <Select>
+              <Select onValueChange={setSelectedStyle}>
                 <SelectTrigger className='w-full max-w-sm md:max-w-[300px] rounded-2xl'>
                   <SelectValue placeholder='Select a Style' />
                 </SelectTrigger>
                 <SelectContent className='rounded-2xl'>
                   <SelectGroup>
                     <SelectLabel className='rounded-2xl'>Styles</SelectLabel>
-                    <SelectItem value='apple'>3D</SelectItem>
-                    <SelectItem value='banana'>Clay</SelectItem>
-                    <SelectItem value='blueberry'>Video Game</SelectItem>
-                    <SelectItem value='grapes'>Pixels</SelectItem>
-                    <SelectItem value='pineapple'>Emoji</SelectItem>
+                    <SelectItem value='3D'>3D</SelectItem>
+                    <SelectItem value='Clay'>Clay</SelectItem>
+                    <SelectItem value='Video game'>Video Game</SelectItem>
+                    <SelectItem value='Pixels'>Pixels</SelectItem>
+                    <SelectItem value='Emoji'>Emoji</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
@@ -148,6 +165,7 @@ const MorphPage = () => {
                   onClick={handleTransform}
                   size='lg'
                   className='rounded-full px-6 w-full max-w-sm md:max-w-[200px]'
+                  disabled={!uploadedImageUrl || !selectedStyle}
                 >
                   <span className='text-base'>Transform</span>
 
@@ -173,7 +191,10 @@ const MorphPage = () => {
 
               <div className='w-full max-w-[400px] aspect-square relative rounded-2xl overflow-hidden bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800'>
                 <Image
-                  src='https://replicate.delivery/pbxt/XDe5oQQKRg0bdyAHjo2BOLAUtFDee1lfHQnL5Z4hANzWyO1JB/ComfyUI_00001_.png'
+                  src={
+                    processedImageUrl ||
+                    'https://replicate.delivery/pbxt/XDe5oQQKRg0bdyAHjo2BOLAUtFDee1lfHQnL5Z4hANzWyO1JB/ComfyUI_00001_.png'
+                  }
                   alt='Transformed image placeholder'
                   fill
                   className='object-cover'
