@@ -56,7 +56,7 @@ func main() {
 	slog.Info("Connected to MongoDB")
 
 	// Replicate Client
-    r8, err := replicate.NewClient(replicate.WithToken("r8_Vj5ZKpItjNXFNKvYLPgliAhzI4Uv7gB2vlSfV"))
+    r8, err := replicate.NewClient(replicate.WithToken(config.REPLICATE_TOKEN))
     if err != nil {
         log.Fatalf("Failed to create Replicate client: %v", err)
     }
