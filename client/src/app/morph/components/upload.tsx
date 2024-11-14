@@ -1,14 +1,19 @@
 'use client'
 
-import { useState } from 'react'
-import { Upload as UploadIcon, X, Check, Trash2 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
-import { Button } from '@/components/ui/button'
-import Image from 'next/image'
 import { cn } from '@/lib/utils'
+import { Check, OctagonAlert, Trash2, Upload as UploadIcon } from 'lucide-react'
+import Image from 'next/image'
+import { useState } from 'react'
 
-export default function Upload() {
+interface UploadProps {
+  onUploadComplete: (url: string) => void
+  onDelete: () => void
+}
+
+export default function Upload({ onUploadComplete, onDelete }: UploadProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
@@ -29,6 +34,7 @@ export default function Upload() {
     setPreview(null)
     setMessage('')
     setProgress(0)
+    onDelete() // Notify parent component
   }
 
   const handleUpload = async (file: File) => {
@@ -62,7 +68,8 @@ export default function Upload() {
       const data = await response.json()
       if (response.ok) {
         setMessage(data.message)
-        console.log('File URL:', data.fileUrl)
+        console.log('File URL:', data.fileUrl, data.message)
+        onUploadComplete(data.fileUrl) // Send url to parentt component
       } else {
         throw new Error(data.error || 'Upload failed')
       }
@@ -90,12 +97,27 @@ export default function Upload() {
                   />
                 </div>
                 <div className='flex items-center justify-between'>
-                  <div className='flex items-center space-x-2'>
-                    <div className='size-7 rounded bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center'>
-                      <Check className='size-4 text-emerald-500' />
+                  {message.startsWith('uploaded successfully!') && (
+                    <div className='flex items-center space-x-2'>
+                      <div className='size-7 rounded bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center'>
+                        <Check className='size-4 text-emerald-500' />
+                      </div>
+                      <span className='text-sm font-medium'>
+                        Upload complete
+                      </span>
                     </div>
-                    <span className='text-sm font-medium'>Upload complete</span>
-                  </div>
+                  )}
+
+                  {message && message.startsWith('Error') && (
+                    <div className='flex items-center space-x-2'>
+                      <div className='size-7 rounded bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center'>
+                        <OctagonAlert className='size-4 text-red-500' />
+                      </div>
+                      <span className='text-sm font-medium text-red-500'>
+                        Upload Failed!
+                      </span>
+                    </div>
+                  )}
                   <Button
                     variant='ghost'
                     size='icon'
@@ -150,13 +172,6 @@ export default function Upload() {
               </label>
             )}
           </div>
-
-          {message && message.startsWith('Error') && (
-            <div className='mt-3 p-3 rounded-lg flex items-center gap-2 text-sm bg-red-50 dark:bg-red-950/50 text-red-600 dark:text-red-400'>
-              <X className='size-4 shrink-0' />
-              <span className='font-medium'>{message.slice(7)}</span>
-            </div>
-          )}
         </CardContent>
       </Card>
     </>
