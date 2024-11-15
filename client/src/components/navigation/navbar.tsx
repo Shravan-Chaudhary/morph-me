@@ -1,8 +1,10 @@
 import { buttonVariants } from '@/components/ui/button'
 import getSession from '@/lib/session'
-import { LogOut, Zap } from 'lucide-react'
+import { Zap } from 'lucide-react'
 import Link from 'next/link'
 import Icons from '../global/icons'
+import RetroCreditButton from './credits-button'
+import ProfileButton from './profile-button'
 
 const Navbar = async () => {
   const session = await getSession()
@@ -18,31 +20,25 @@ const Navbar = async () => {
           </Link>
         </div>
 
-        <nav className='hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform'>
-          <ul className='flex items-center justify-center gap-8'>
-            <li className='hover:text-foreground/80 text-sm'>
-              <Link href='#process'>Process</Link>
-            </li>
-            <li className='hover:text-foreground/80 text-sm'>
-              <Link href='#features'>Features</Link>
-            </li>
-            <li className='hover:text-foreground/80 text-sm'>
-              <Link href='#pricing'>Pricing</Link>
-            </li>
-          </ul>
-        </nav>
+        {session && (
+          <nav className='hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform'>
+            <ul className='flex items-center justify-center gap-8'>
+              <li className='hover:text-foreground/80 text-sm'>
+                <Link href='/morph'>Transform</Link>
+              </li>
+              <li className='hover:text-foreground/80 text-sm'>
+                <Link href='/buy-credits'>Pricing</Link>
+              </li>
+            </ul>
+          </nav>
+        )}
 
         <div className='flex items-center gap-4'>
           {session ? (
-            <>
-              <Link
-                href='/logout'
-                className={buttonVariants({ size: 'sm', variant: 'outline' })}
-              >
-                <span className='mr-2'>Logout</span>
-                <LogOut className='w-4 h-4 text-primary' />
-              </Link>
-            </>
+            <div className='flex items-center justify-center space-x-5 md:space-x-8 lg:space-x-12'>
+              <RetroCreditButton />
+              <ProfileButton />
+            </div>
           ) : (
             <>
               <Link

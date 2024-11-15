@@ -6,7 +6,7 @@ import { cookies } from 'next/headers'
 //   user: User
 // }
 
-interface User {
+export interface User {
   id: string
   name: string
   email: string
