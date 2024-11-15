@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"log/slog"
+	"morph-me/internal/auth"
 	"morph-me/internal/database"
 	"morph-me/internal/http/handler"
 	"morph-me/internal/http/respository"
@@ -63,26 +64,29 @@ func main() {
 
 	// Router
 	router := gin.Default()
-	corsconfig := cors.DefaultConfig()
-	corsconfig.AllowOrigins = []string{"http://localhost:3000", "http://localhost:5173"}
-	corsconfig.AllowMethods = []string{"GET", "POST", "OPTIONS", "PUT", "PATCH", "DELETE"}
-	corsconfig.AllowHeaders = []string{
-		"Origin",
-		"Content-Type",
-		"Accept",
-		"Authorization",
-		"Cross-Origin-Opener-Policy",
-		"Cross-Origin-Embedder-Policy",
-	}
-	corsconfig.ExposeHeaders = []string{
-		"Cross-Origin-Opener-Policy",
-		"Cross-Origin-Embedder-Policy",
-	}
-	corsconfig.AllowCredentials = true
-	corsconfig.MaxAge = 12 * time.Hour
+corsconfig := cors.DefaultConfig()
+corsconfig.AllowOrigins = []string{"http://localhost:3000", "http://localhost:5173"}
+corsconfig.AllowMethods = []string{"GET", "POST", "OPTIONS", "PUT", "PATCH", "DELETE"}
+corsconfig.AllowHeaders = []string{
+    "Origin",
+    "Content-Type",
+    "Accept",
+    "Authorization",
+    "Cross-Origin-Opener-Policy",
+    "Cross-Origin-Embedder-Policy",
+    "Cookie",
+    "Set-Cookie",
+}
+corsconfig.ExposeHeaders = []string{
+    "Cross-Origin-Opener-Policy",
+    "Cross-Origin-Embedder-Policy",
+    "Set-Cookie",
+}
+corsconfig.AllowCredentials = true
+corsconfig.MaxAge = 12 * time.Hour
+router.Use(cors.New(corsconfig))
 
-	router.Use(cors.New(corsconfig))
-
+	// Instances
 	userRespository, err := respository.NewMongoUserRepository(client)
 	if err != nil {
 		log.Fatalf("Failed to create user repository: %s", err.Error())
@@ -92,24 +96,33 @@ func main() {
 	if err != nil {
 		panic(err.Error())
 	}
+	authMiddleware := auth.AuthMiddleware(config.JWT_SECRET)
 	userService := service.NewUserService(userRespository)
-	userHandler := handler.NewUserHandler()
+	userHandler := handler.NewUserHandler(userService)
 	googleHandler := handler.NewGoogleOAuthHandler(userService, googleOauthConfig, config.JWT_SECRET)
 	uploadHandler := handler.NewUploadHandler(s3Storage)
 
 
 	// Routes
+	router.GET("/auth/google/callback", googleHandler.GoogleCallBackHandler)
+	router.POST("/users", userHandler.HandleCreateUser)
+	router.POST("/upload", uploadHandler.Upload)
+	router.GET("/self", authMiddleware, userHandler.Self)
+	router.GET("/predictions/:prediction_id", func (c *gin.Context) {
+		GetPredictionStatus(c, &config)
+	})
+	router.POST("/predictions", func(c *gin.Context) {
+		Prediction(c, r8)
+	})
+
+	s := server.NewServer(":8080", router)
+	s.Start()
+}
 	type ProcessRequest struct {
     	ImageUrl string  `json:"image_url" binding:"required"`
     	Style    string  `json:"style" binding:"required"`
 	}
-	router.GET("/auth/google/callback", googleHandler.GoogleCallBackHandler)
-	router.POST("/users", userHandler.HandleCreateUser)
-	router.POST("/upload", uploadHandler.Upload)
-	router.GET("/predictions/:prediction_id", func (c *gin.Context) {
-		getPredictionStatus(c, &config)
-	})
-	router.POST("/predictions", func(c *gin.Context) {
+func Prediction (c *gin.Context, r8 *replicate.Client) {
 		var req ProcessRequest
         if err := c.ShouldBindJSON(&req); err != nil {
             c.JSON(400, gin.H{"error": err.Error()})
@@ -142,12 +155,9 @@ func main() {
             "status": "success",
             "prediction_id": prediction.ID,
         })
-	})
+	}
 
-	s := server.NewServer(":8080", router)
-	s.Start()
-}
-func getPredictionStatus(c *gin.Context, config *util.Config) {
+func GetPredictionStatus(c *gin.Context, config *util.Config) {
     url := "https://api.replicate.com/v1/predictions/" + c.Param("prediction_id")
     req, err := http.NewRequest("GET", url, nil)
     if err != nil {
@@ -175,6 +185,3 @@ func getPredictionStatus(c *gin.Context, config *util.Config) {
 }
 
 // TODO: Implement credit checkig system
-
-
-

@@ -57,14 +57,14 @@ func (h *GoogleOAuthHandler) GoogleCallBackHandler(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	// TODO: Set JWT as HttpOnly cookie
+	// TODO: Change these before deploying to production
 	c.SetCookie(
 		"accessToken",
 		signedToken,
 		2592000, //  MaxAge (30 days)
 		"/", // Path
 		"", // Domain
-		true, // Secure
+		false, // Secure
 		true, // HttpOnly
 	)
 	// TODO: Redirect to frontend
