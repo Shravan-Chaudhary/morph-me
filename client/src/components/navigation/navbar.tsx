@@ -1,10 +1,11 @@
-import { Button, buttonVariants } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
+import getSession from '@/lib/session'
+import { LogOut, Zap } from 'lucide-react'
 import Link from 'next/link'
 import Icons from '../global/icons'
-import { Zap } from 'lucide-react'
 
 const Navbar = async () => {
-  const user = false
+  const session = await getSession()
   return (
     <header className='px-4 h-14 sticky top-0 inset-x-0 w-full bg-background/40 backdrop-blur-lg border-b border-border z-50'>
       <div className='flex items-center justify-between h-full mx-auto md:max-w-screen-xl'>
@@ -32,8 +33,16 @@ const Navbar = async () => {
         </nav>
 
         <div className='flex items-center gap-4'>
-          {user ? (
-            'user button'
+          {session ? (
+            <>
+              <Link
+                href='/logout'
+                className={buttonVariants({ size: 'sm', variant: 'outline' })}
+              >
+                <span className='mr-2'>Logout</span>
+                <LogOut className='w-4 h-4 text-primary' />
+              </Link>
+            </>
           ) : (
             <>
               <Link

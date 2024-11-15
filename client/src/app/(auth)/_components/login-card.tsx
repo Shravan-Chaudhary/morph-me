@@ -1,29 +1,49 @@
 'use client'
 
-import React from 'react'
-import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
-import { ArrowRight, Fingerprint } from 'lucide-react'
 import { Icons } from '@/components'
-import { useGoogleLogin } from '@react-oauth/google'
-import auth from '@/actions/auth'
 import { useToast } from '@/components/hooks/use-toast'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
+import { Separator } from '@/components/ui/separator'
+import { useGoogleLogin } from '@react-oauth/google'
+import { ArrowRight, Fingerprint } from 'lucide-react'
 
 const LoginCard = () => {
   const { toast } = useToast()
+  // const router = useRouter()
   const login = useGoogleLogin({
     onSuccess: async (token) => {
-      const res = await auth(token.code)
-      if (res.type === 'error') {
+      // console.log('token from google: ', token)
+      try {
+        const res = await fetch(
+          `http://localhost:8080/auth/google/callback?code=${token.code}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+          },
+        )
+        if (!res.ok) {
+          toast({
+            variant: 'destructive',
+            title: 'Error',
+            description: 'Error Loggin in. Please try again.',
+          })
+          return
+        }
+        const data = await res.json()
+        // console.log('outhresponse: ', data)
+        window.location.href = '/morph'
+      } catch (error) {
+        console.log('error: ', error)
         toast({
           variant: 'destructive',
           title: 'Error',
           description: 'Error Loggin in. Please try again.',
         })
-        return
       }
-      console.log('Logged in successfully')
     },
     onError: (error) => {
       console.error(error)
@@ -93,19 +113,6 @@ const LoginCard = () => {
           </a>
         </p>
       </CardFooter>
-      <Button
-        onClick={async () => {
-          const res = await fetch('http://localhost:8080/self')
-          if (!res.ok) {
-            console.log('Error')
-            return
-          }
-          const data = await res.json()
-          console.log(data)
-        }}
-      >
-        Self
-      </Button>
     </Card>
   )
 }

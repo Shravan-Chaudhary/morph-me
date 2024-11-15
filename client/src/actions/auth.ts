@@ -6,6 +6,13 @@ export default async function auth(code: string) {
   try {
     const res = await fetch(
       `${process.env.BASE_URL}/auth/google/callback?code=${code}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      },
     )
     if (!res.ok) {
       const errorText = await res.json()
@@ -35,11 +42,11 @@ export default async function auth(code: string) {
     cookies().set({
       name: 'accessToken',
       value: parsedAccessToken.accessToken as string,
-      expires: new Date(Date.now() + 2592000000),
-      httpOnly: true,
+      maxAge: 2592000,
       path: '/',
-      domain: 'localhost', // TODO: Change this to new domain after deployment
-      sameSite: 'strict',
+      domain: '', // TODO: Change this to new domain after deployment
+      secure: false,
+      httpOnly: true,
     })
 
     return {
