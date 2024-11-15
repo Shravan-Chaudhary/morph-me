@@ -1,14 +1,15 @@
-'use client'
-
-import React from 'react'
-import Link from 'next/link'
-import { ChevronLeft, Home } from 'lucide-react'
-import { ArrowLeft } from 'lucide-react'
-import LoginCard from '../_components/login-card'
 import { Container, Wrapper } from '@/components'
-import { Button } from '@/components/ui/button'
+import { ChevronLeft, Home } from 'lucide-react'
+import Link from 'next/link'
+import LoginCard from '../_components/login-card'
+import getSession from '@/lib/session'
+import { redirect } from 'next/navigation'
 
-export default function Component() {
+export default async function SignInPage() {
+  const session = await getSession()
+  if (session) {
+    redirect('/')
+  }
   return (
     <section className='min-h-screen bg-gradient-to-br from-green-50 to-white'>
       <Wrapper>
