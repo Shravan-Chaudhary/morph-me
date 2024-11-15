@@ -48,8 +48,8 @@ func (r *MongoUserRespository) CreateUser(ctx context.Context, user *model.User)
 
 func (r *MongoUserRespository) FindUserByEmail(ctx context.Context, email string) (*model.User, error) {
 	 user :=&model.User{}
- 		 err := r.coll.FindOne(ctx, bson.M{"email": email}).Decode(user)
-		 if err != nil {
+ 	 err := r.coll.FindOne(ctx, bson.M{"email": email}).Decode(user)
+	 if err != nil {
 			 return nil, err
 		 }
 	 return user, nil
