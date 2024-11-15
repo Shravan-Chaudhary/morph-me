@@ -29,6 +29,7 @@ func (s *UserService) CreateOrUpdateUser(ctx context.Context,userInfo map[string
 			ID:        primitive.NewObjectID(),
 			Email:     userInfo["email"].(string),
 			Name:      userInfo["name"].(string),
+			Role:      "customer",
 			Credits:   2,
 			GoogleID:  userInfo["id"].(string),
 			CreatedAt: time.Now(),
@@ -46,4 +47,12 @@ func (s *UserService) CreateOrUpdateUser(ctx context.Context,userInfo map[string
 	//TODO: Implement update user logic
 	// returing existing user for now
 	return existingUser, nil
+}
+
+func (s *UserService) GetUserByEmail(ctx context.Context, email string) (*model.User, error) {
+	user, err := s.userRespository.FindUserByEmail(ctx, email)
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
 }
