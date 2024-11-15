@@ -14,6 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu'
+import RetroCreditButton from './credits-button'
 
 const ProfileButton = () => {
   const [user, setUser] = useState<User>()
@@ -47,44 +48,47 @@ const ProfileButton = () => {
     fetchCustomer()
   }, [])
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild className='cursor-pointer'>
-        <Avatar>
-          <AvatarImage src='https://github.com/shadcn.png' alt='@shadcn' />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className='w-50'>
-        <DropdownMenuLabel>
-          <div className='flex flex-col gap-1 p-[2px]'>
-            <p className='leading-none'>{user?.name}</p>
-            <p className='text-xs md:text-sm leading-none text-muted-foreground break-all font-normal'>
-              {user?.email}
-            </p>
-          </div>
-        </DropdownMenuLabel>
+    <div className='flex items-center justify-center space-x-5 md:space-x-8 lg:space-x-12'>
+      <RetroCreditButton credits={user?.credits} />
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild className='cursor-pointer'>
+          <Avatar>
+            <AvatarImage src='https://github.com/shadcn.png' alt='@shadcn' />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className='w-50'>
+          <DropdownMenuLabel>
+            <div className='flex flex-col gap-1 p-[2px]'>
+              <p className='leading-none'>{user?.name}</p>
+              <p className='text-xs md:text-sm leading-none text-muted-foreground break-all font-normal'>
+                {user?.email}
+              </p>
+            </div>
+          </DropdownMenuLabel>
 
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <Link href='/buy-credits'>
+          <DropdownMenuSeparator />
+          <DropdownMenuGroup>
+            <Link href='/buy-credits'>
+              <DropdownMenuItem className='font-medium cursor-pointer'>
+                <CirclePlus className='size-4' />
+                Buy Credits
+              </DropdownMenuItem>
+            </Link>
+            <Link href='/morph'>
+              <DropdownMenuItem className='font-medium cursor-pointer'>
+                <WandSparkles className='size-4' />
+                Transform
+              </DropdownMenuItem>
+            </Link>
             <DropdownMenuItem className='font-medium cursor-pointer'>
-              <CirclePlus className='size-4' />
-              Buy Credits
+              <LogOut className='size-4' />
+              Logout
             </DropdownMenuItem>
-          </Link>
-          <Link href='/morph'>
-            <DropdownMenuItem className='font-medium cursor-pointer'>
-              <WandSparkles className='size-4' />
-              Transform
-            </DropdownMenuItem>
-          </Link>
-          <DropdownMenuItem className='font-medium cursor-pointer'>
-            <LogOut className='size-4' />
-            Logout
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-      </DropdownMenuContent>
-    </DropdownMenu>
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   )
 }
 {

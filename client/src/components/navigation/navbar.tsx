@@ -3,7 +3,6 @@ import getSession from '@/lib/session'
 import { Zap } from 'lucide-react'
 import Link from 'next/link'
 import Icons from '../global/icons'
-import RetroCreditButton from './credits-button'
 import ProfileButton from './profile-button'
 
 const Navbar = async () => {
@@ -35,10 +34,7 @@ const Navbar = async () => {
 
         <div className='flex items-center gap-4'>
           {session ? (
-            <div className='flex items-center justify-center space-x-5 md:space-x-8 lg:space-x-12'>
-              <RetroCreditButton />
-              <ProfileButton />
-            </div>
+            <ProfileButton />
           ) : (
             <>
               <Link

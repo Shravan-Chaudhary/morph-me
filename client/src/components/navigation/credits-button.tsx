@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 
-export default function RetroCreditButton() {
+export default function RetroCreditButton({ credits }: { credits: any }) {
   return (
     <Button
       variant={'outline'}
@@ -16,7 +16,7 @@ export default function RetroCreditButton() {
         className='size-5 md:size-6'
       />
       <span className='text-neutral-600 font-medium text-xs md:text-sm'>
-        5 Credits
+        {credits} Credits
       </span>
     </Button>
   )
