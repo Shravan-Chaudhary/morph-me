@@ -1,7 +1,9 @@
 'use client'
+import logout from '@/actions/logout'
 import { User } from '@/lib/session'
 import { CirclePlus, LogOut, WandSparkles } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useToast } from '../hooks/use-toast'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
@@ -19,6 +21,22 @@ import RetroCreditButton from './credits-button'
 const ProfileButton = () => {
   const [user, setUser] = useState<User>()
   const { toast } = useToast()
+  const router = useRouter()
+
+  const handleLogout = async () => {
+    try {
+      await logout()
+      setUser(undefined)
+      window.location.href = '/'
+    } catch (error) {
+      console.error(error)
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Error logging out',
+      })
+    }
+  }
 
   useEffect(() => {
     const fetchCustomer = async () => {
@@ -81,7 +99,10 @@ const ProfileButton = () => {
                 Transform
               </DropdownMenuItem>
             </Link>
-            <DropdownMenuItem className='font-medium cursor-pointer'>
+            <DropdownMenuItem
+              className='font-medium cursor-pointer'
+              onClick={handleLogout}
+            >
               <LogOut className='size-4' />
               Logout
             </DropdownMenuItem>
