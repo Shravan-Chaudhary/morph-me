@@ -15,6 +15,7 @@ import (
 	"morph-me/internal/server"
 	"morph-me/internal/util"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -49,10 +50,20 @@ func main() {
 	}
 
 	// Connect to MongoDB
-	client, err := database.ConnectMongoDB(config.DatabaseURI)
+	mongoConfig := database.ConnectionConfig{
+	    URI:            config.DatabaseURI,
+	    MaxPoolSize:    30,
+	    MinPoolSize:    10,
+	    MaxIdleTime:    1* time.Minute,
+	    ConnectTimeout: 10 * time.Second,
+	    RetryAttempts:  5,
+	    RetryInterval:  3 * time.Second,
+	}
+	client, err := database.ConnectMongoDB(mongoConfig)
 	defer client.Disconnect(context.Background())
 	if err != nil {
-		log.Fatalf("Failed to connect to MongoDB: %s", err.Error())
+
+		os.Exit(1)
 	}
 	slog.Info("Connected to MongoDB")
 
@@ -65,7 +76,7 @@ func main() {
 	// Router
 	router := gin.Default()
 corsconfig := cors.DefaultConfig()
-corsconfig.AllowOrigins = []string{"http://localhost:3000", "http://localhost:5173"}
+corsconfig.AllowOrigins = []string{config.CLIENT_URL, "http://localhost:5173"}
 corsconfig.AllowMethods = []string{"GET", "POST", "OPTIONS", "PUT", "PATCH", "DELETE"}
 corsconfig.AllowHeaders = []string{
     "Origin",
@@ -83,11 +94,11 @@ corsconfig.ExposeHeaders = []string{
     "Set-Cookie",
 }
 corsconfig.AllowCredentials = true
-corsconfig.MaxAge = 12 * time.Hour
+corsconfig.MaxAge = 24 * time.Hour
 router.Use(cors.New(corsconfig))
 
 	// Instances
-	userRespository, err := respository.NewMongoUserRepository(client)
+	userRespository, err := respository.NewMongoUserRepository(client, config.DATABASE_NAME)
 	if err != nil {
 		log.Fatalf("Failed to create user repository: %s", err.Error())
 	}
@@ -139,8 +150,8 @@ func Prediction (c *gin.Context, r8 *replicate.Client) {
             "instant_id_strength": 0.8,
         }
 	 // Run the model and wait for output
-	//  version := "fofr/face-to-many:a07f252abbbd832009640b27f063ea52d87d7a23a185ca165bec23b5adc8deaf"
-        prediction, err := r8.CreatePrediction(c.Request.Context(), "a07f252abbbd832009640b27f063ea52d87d7a23a185ca165bec23b5adc8deaf", input,nil, false) // nil webhook since we're waiting
+	 version := "a07f252abbbd832009640b27f063ea52d87d7a23a185ca165bec23b5adc8deaf"
+        prediction, err := r8.CreatePrediction(c.Request.Context(), version, input,nil, false) // nil webhook since we're waiting
         if err != nil {
             c.JSON(500, gin.H{
                 "error": "Processing failed",
