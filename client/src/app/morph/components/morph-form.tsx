@@ -38,16 +38,19 @@ const MorphForm = () => {
     setLoading(true)
 
     try {
-      const res = await fetch('http://localhost:8080/predictions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/predictions`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            image_url: uploadedImageUrl,
+            style: selectedStyle,
+          }),
         },
-        body: JSON.stringify({
-          image_url: uploadedImageUrl,
-          style: selectedStyle,
-        }),
-      })
+      )
       if (!res.ok) {
         console.error('Response status:', res.status)
         const errorText = await res.text()
@@ -61,13 +64,13 @@ const MorphForm = () => {
         return
       }
       const { status, prediction_id } = await res.json()
-      console.log('Prediction ID:', prediction_id)
+      // console.log('Prediction ID:', prediction_id)
 
       // Poll the status of the prediction
       const checkStatus = async (prediction_id: string) => {
         try {
           const response = await fetch(
-            `http://localhost:8080/predictions/${prediction_id}`,
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/predictions/${prediction_id}`,
             {
               method: 'GET',
             },
@@ -87,10 +90,10 @@ const MorphForm = () => {
           }
 
           const prediction = await response.json()
-          console.log('Prediction status:', prediction.status)
+          // console.log('Prediction status:', prediction.status)
 
           if (prediction.status === 'succeeded') {
-            console.log('Processing complete:', prediction.output)
+            // console.log('Processing complete:', prediction.output)
             setProcessedImageUrl(prediction.output[0])
             setLoading(false)
             // Handle the completed prediction

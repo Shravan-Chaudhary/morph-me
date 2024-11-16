@@ -21,7 +21,6 @@ export async function GET(req: NextRequest) {
       return Response.json({ message: 'No token recieved' })
     }
     const parsedAccessToken = cookie.parse(accessToken)
-    console.log(parsedAccessToken)
 
     return Response.json({ data: 'token recieved', cookie: accessToken })
   } catch (error) {

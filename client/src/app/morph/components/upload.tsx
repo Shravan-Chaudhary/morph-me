@@ -57,10 +57,13 @@ export default function Upload({ onUploadComplete, onDelete }: UploadProps) {
         })
       }, 200)
 
-      const response = await fetch('http://localhost:8080/upload', {
-        method: 'POST',
-        body: formData,
-      })
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/upload`,
+        {
+          method: 'POST',
+          body: formData,
+        },
+      )
 
       clearInterval(progressInterval)
       setProgress(100)
@@ -68,7 +71,7 @@ export default function Upload({ onUploadComplete, onDelete }: UploadProps) {
       const data = await response.json()
       if (response.ok) {
         setMessage(data.message)
-        console.log('File URL:', data.fileUrl, data.message)
+        // console.log('File URL:', data.fileUrl, data.message)
         onUploadComplete(data.fileUrl) // Send url to parentt component
       } else {
         throw new Error(data.error || 'Upload failed')

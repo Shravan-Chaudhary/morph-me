@@ -16,7 +16,7 @@ const LoginCard = () => {
       // console.log('token from google: ', token)
       try {
         const res = await fetch(
-          `http://localhost:8080/auth/google/callback?code=${token.code}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/google/callback?code=${token.code}`,
           {
             method: 'GET',
             headers: {
@@ -37,7 +37,6 @@ const LoginCard = () => {
         // console.log('outhresponse: ', data)
         window.location.href = '/morph'
       } catch (error) {
-        console.log('error: ', error)
         toast({
           variant: 'destructive',
           title: 'Error',
