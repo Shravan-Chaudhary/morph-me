@@ -39,4 +39,3 @@ func (h *UserHandler) Self(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"user": user})
 }
 
-// TODO: Implement GetProfile method

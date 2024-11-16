@@ -14,6 +14,8 @@ type Config struct {
 	S3_SECRET_KEY string `mapstructure:"S3_SECRET_KEY"`
 	REPLICATE_TOKEN string `mapstructure:"REPLICATE_TOKEN"`
 	JWT_SECRET string `mapstructure:"JWT_SECRET"`
+	CLIENT_URL string `mapstructure:"CLIENT_URL"`
+	DATABASE_NAME string `mapstructure:"DATABASE_NAME"`
 }
 
 func LoadConfig() (config Config, err error) {

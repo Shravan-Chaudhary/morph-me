@@ -20,8 +20,8 @@ type MongoUserRespository struct{
 	coll *mongo.Collection
 }
 
-func NewMongoUserRepository(client *mongo.Client) (*MongoUserRespository, error) {
-    coll := client.Database("revamp_dev").Collection("users")
+func NewMongoUserRepository(client *mongo.Client, dbName string) (*MongoUserRespository, error) {
+    coll := client.Database(dbName).Collection("users")
 
     // Create unique index on email field
     _, err := coll.Indexes().CreateOne(

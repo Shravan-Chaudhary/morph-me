@@ -67,6 +67,5 @@ func (h *GoogleOAuthHandler) GoogleCallBackHandler(c *gin.Context) {
 		false, // Secure
 		true, // HttpOnly
 	)
-	// TODO: Redirect to frontend
-	c.JSON(http.StatusOK, gin.H{"token": signedToken, "user": user})
+	c.JSON(http.StatusOK, gin.H{"success": "true","message": "Successfully logged in"})
 }
