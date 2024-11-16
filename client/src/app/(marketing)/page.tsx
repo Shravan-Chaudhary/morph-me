@@ -1,4 +1,3 @@
-'use client'
 import { Container, Wrapper } from '@/components'
 import { AnimatedShinyPill } from '@/components/ui/animated-shiny-pill'
 import { Button } from '@/components/ui/button'
