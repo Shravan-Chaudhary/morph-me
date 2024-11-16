@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/card'
 import Marquee from '@/components/ui/marquee'
 import SectionBadge from '@/components/ui/section-badge'
+import SparklesText from '@/components/ui/sparkles-text'
 import { features, pricingCards, process, reviews } from '@/constants'
 import { cn } from '@/lib/utils'
 import { ArrowRight, User, Zap } from 'lucide-react'
@@ -25,12 +26,15 @@ const HomePage = () => {
     <section className='w-full relative flex flex-col items-center justify-center px-4 md:px-0 py-8'>
       {/* Hero */}
       <Wrapper>
+        <div className='absolute inset-0 dark:bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[linear-gradient(to_right,#161616_1px,transparent_1px),linear-gradient(to_bottom,#161616_1px,transparent_1px)] bg-[size:5rem_5rem] md:bg-[size:6rem_6rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_100%)] -z-100 h-[150vh] opacity-5' />
         <Container className='z-10'>
           <div className='flex flex-col items-center justify-center py-16 md:py-20 w-full'>
             <AnimatedShinyPill />
             <div className='flex flex-col items-center mt-8 max-w-3xl mx-auto w-11/12 md:w-full'>
-              <h1 className='text-4xl md:text-6xl md:!leading-snug font-semibold text-center bg-clip-text'>
-                Transform Your Face in Seconds with AI Magic
+              <h1 className='text-3xl md:text-5xl md:!leading-snug font-semibold text-center bg-clip-text'>
+                Transform Your Face <br />
+                in Seconds with
+                <SparklesText text='AI Magic' className='font-semibold' />
               </h1>
               <p className='text-base md:text-lg text-foreground/80 mt-6 text-center'>
                 Upload a selfie and watch AI create amazing variations of your
@@ -41,14 +45,14 @@ const HomePage = () => {
                   href='/morph'
                   className='flex items-center justify-center w-max rounded-full border border-gray-300 bg-white/90 hover:bg-gray-50 px-2 py-1 md:py-2 md:gap-8 shadow-md hover:shadow-lg transition-all cursor-pointer select-none'
                 >
-                  <p className='text-foreground text-sm text-center md:text-base font-medium pl-4 pr-4 lg:marker:pr-0'>
+                  <p className='text-foreground text-base text-center md:text-lg font-medium pl-4 pr-4 lg:marker:pr-0'>
                     Transform your face now ✨
                   </p>
                   <Button
                     size='sm'
                     className='rounded-full hidden lg:flex border border-foreground/20'
                   >
-                    Stat Morphing
+                    Start Morphing
                     <ArrowRight className='w-4 h-4 ml-1' />
                   </Button>
                 </Link>
