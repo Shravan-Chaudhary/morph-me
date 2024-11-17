@@ -1,20 +1,11 @@
 import { Container, Wrapper } from '@/components'
 import { AnimatedShinyPill } from '@/components/ui/animated-shiny-pill'
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 import Marquee from '@/components/ui/marquee'
 import SectionBadge from '@/components/ui/section-badge'
 import SparklesText from '@/components/ui/sparkles-text'
-import { features, pricingCards, process, reviews } from '@/constants'
-import { cn } from '@/lib/utils'
-import { ArrowRight, User, Zap } from 'lucide-react'
+import { features, process, reviews } from '@/constants'
+import { ArrowRight, User } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -23,20 +14,23 @@ const HomePage = () => {
   const secondRow = reviews.slice(reviews.length / 2)
 
   return (
-    <section className='w-full relative flex flex-col items-center justify-center px-4 md:px-0 py-8'>
+    <section className='w-full relative flex flex-col items-center justify-center px-4 md:px-0 py-6'>
       {/* Hero */}
       <Wrapper>
-        <div className='absolute inset-0 dark:bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[linear-gradient(to_right,#161616_1px,transparent_1px),linear-gradient(to_bottom,#161616_1px,transparent_1px)] bg-[size:5rem_5rem] md:bg-[size:6rem_6rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_100%)] -z-100 h-[150vh] opacity-5' />
+        {/* <div className='absolute inset-0 dark:bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[linear-gradient(to_right,#161616_1px,transparent_1px),linear-gradient(to_bottom,#161616_1px,transparent_1px)] bg-[size:5rem_5rem] md:bg-[size:6rem_6rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_100%)] -z-100 h-[150vh] opacity-5' /> */}
         <Container className='z-10'>
           <div className='flex flex-col items-center justify-center py-16 md:py-20 w-full'>
             <AnimatedShinyPill />
             <div className='flex flex-col items-center mt-8 max-w-3xl mx-auto w-11/12 md:w-full'>
-              <h1 className='text-3xl md:text-5xl md:!leading-snug font-semibold text-center bg-clip-text'>
-                Transform Your Face <br />
-                in Seconds with
-                <SparklesText text='AI Magic' className='font-semibold' />
+              <h1 className='text-4xl md:text-5xl md:!leading-snug font-semibold text-center bg-clip-text'>
+                Transform Your Face with
+                <br />
+                <SparklesText
+                  text='AI Magic'
+                  className='font-semibold md:mt-2'
+                />
               </h1>
-              <p className='text-base md:text-lg text-foreground/80 mt-6 text-center'>
+              <p className='text-base md:text-lg font-medium md:font-semibold text-foreground/70 mt-7 text-center'>
                 Upload a selfie and watch AI create amazing variations of your
                 look. Fast, fun, and incredibly easy to use.
               </p>
@@ -45,7 +39,7 @@ const HomePage = () => {
                   href='/morph'
                   className='flex items-center justify-center w-max rounded-full border border-gray-300 bg-white/90 hover:bg-gray-50 px-2 py-1 md:py-2 md:gap-8 shadow-md hover:shadow-lg transition-all cursor-pointer select-none'
                 >
-                  <p className='text-foreground text-base text-center md:text-lg font-medium pl-4 pr-4 lg:marker:pr-0'>
+                  <p className='text-foreground/85 text-base text-center md:text-lg font-medium pl-4 pr-4 lg:marker:pr-0'>
                     Transform your face now ✨
                   </p>
                   <Button
@@ -59,7 +53,7 @@ const HomePage = () => {
               </div>
             </div>
             {/* Image and Gradient */}
-            <div className='relative w-full max-w-6xl mx-auto px-4 md:px-8 py-10 md:py-20'>
+            <div className='relative w-full max-w-6xl mx-auto px-4 md:px-8 py-10 md:py-14'>
               {/* Gradient */}
               {/* previous classes: absolute top-1/2 left-1/2 -z-10 gradient w-3/4 -translate-x-1/2 -translate-y-1/2 h-3/4 inset-0 blur-[10rem] */}
               <div className='absolute top-1/2 left-1/2 -z-10 gradient w-3/4 -translate-x-1/2 -translate-y-1/2 h-3/4 inset-0 blur-[10rem]'></div>
@@ -160,68 +154,6 @@ const HomePage = () => {
                 </div>
               ))}
             </div>
-          </div>
-        </Container>
-      </Wrapper>
-
-      {/* Pricing */}
-      <Wrapper className='max-w-6xl flex flex-col items-center justify-center py-12 relative'>
-        <Container>
-          <div className='max-w-md md:mx-auto text-start md:text-center'>
-            <SectionBadge title='Pricing' />
-            <h2 className='text-3xl lg:text-4xl font-semibold mt-6'>
-              Flexible Morphing, No strings Attached
-            </h2>
-            <p className='text-muted-foreground mt-6'>
-              Say goodbye to subscription traps. With credits system you pay as
-              you go.
-            </p>
-          </div>
-        </Container>
-        <Container className='flex items-center justify-center'>
-          <div className='grid grid-cols-1 lg:grid-cols-3 gap-5 w-full md:gap-8 py-10 md:py-20 flex-wrap max-w-4xl'>
-            {pricingCards.map((card) => (
-              <Card
-                key={card.title}
-                className={cn(
-                  'flex flex-col w-full border-x-neutral-700',
-                  card.title == 'Unlimited Saas' && 'border-2 border-primary',
-                )}
-              >
-                <CardHeader className='border-2 border-border'>
-                  <span>{card.title}</span>
-                  <CardTitle
-                    className={cn(
-                      card.title !== 'Unlimited Saas' &&
-                        'text-muted-foreground',
-                    )}
-                  >
-                    {card.price}
-                  </CardTitle>
-                  <CardDescription>{card.description}</CardDescription>
-                </CardHeader>
-                <CardContent className='pt-6 space-y-3'>
-                  {card.features.map((feature) => (
-                    <div key={feature} className='flex items-center gap-2'>
-                      <Zap className='w-4 h-4 fill-primary text-primary' />
-                      <p className=''>{feature}</p>
-                    </div>
-                  ))}
-                </CardContent>
-                <CardFooter className='mt-auto w-full'>
-                  <Link
-                    href='#'
-                    className={cn(
-                      'w-full text-center text-primary-foreground bg-primary p-2 rounded-md text-sm font-medium',
-                      card.title !== 'Unlimited Saas' &&
-                        '!bg-foreground !text-background',
-                    )}
-                  >
-                    {card.buttonText}
-                  </Link>
-                </CardFooter>
-              </Card>
-            ))}
           </div>
         </Container>
       </Wrapper>
