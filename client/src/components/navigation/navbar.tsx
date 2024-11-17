@@ -1,5 +1,5 @@
 import { buttonVariants } from '@/components/ui/button'
-import getSession from '@/lib/session'
+import getSession from '@/actions/session'
 import { Zap } from 'lucide-react'
 import Link from 'next/link'
 import Icons from '../global/icons'

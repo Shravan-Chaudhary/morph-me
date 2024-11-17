@@ -1,7 +1,7 @@
 import { Footer, Navbar } from '@/components'
 import React from 'react'
 import { redirect } from 'next/navigation'
-import getSession from '@/lib/session'
+import getSession from '@/actions/session'
 
 interface Props {
   children: React.ReactNode

@@ -2,7 +2,7 @@ import { Container, Wrapper } from '@/components'
 import { ChevronLeft, Home } from 'lucide-react'
 import Link from 'next/link'
 import LoginCard from '../_components/login-card'
-import getSession from '@/lib/session'
+import getSession from '@/actions/session'
 import { redirect } from 'next/navigation'
 
 export default async function SignInPage() {
