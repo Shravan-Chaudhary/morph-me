@@ -1,10 +1,10 @@
 'use client'
 import logout from '@/actions/logout'
-import { User } from '@/lib/session'
+import { useUserStore } from '@/stores/user-store'
 import { CirclePlus, LogOut, WandSparkles } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useToast } from '../hooks/use-toast'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import {
@@ -19,15 +19,15 @@ import {
 import RetroCreditButton from './credits-button'
 
 const ProfileButton = () => {
-  const [user, setUser] = useState<User>()
   const { toast } = useToast()
+  const { user, update } = useUserStore()
   const router = useRouter()
 
   const handleLogout = async () => {
     try {
       await logout()
-      setUser(undefined)
-      window.location.href = '/'
+      update(null)
+      router.push('/')
     } catch (error) {
       console.error(error)
       toast({
@@ -54,7 +54,7 @@ const ProfileButton = () => {
           return
         }
         const data = await res.json()
-        setUser(data.user)
+        update(data.user)
       } catch (error) {
         toast({
           variant: 'destructive',
