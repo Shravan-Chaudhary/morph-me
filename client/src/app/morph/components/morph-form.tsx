@@ -16,6 +16,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
 import Upload from './upload'
+import { useUserStore } from '@/stores/user-store'
 
 type Error = {
   error?: string
@@ -29,6 +30,7 @@ const MorphForm = () => {
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string>('')
   const [processedImageUrl, setProcessedImageUrl] = useState<string>('')
   const { toast } = useToast()
+  const { updateCredits } = useUserStore()
 
   const handleUploadComplete = (url: string) => {
     setUploadedImageUrl(url)
@@ -109,6 +111,30 @@ const MorphForm = () => {
           if (prediction.status === 'succeeded') {
             // console.log('Processing complete:', prediction.output)
             setProcessedImageUrl(prediction.output[0])
+            // Get credits
+            const userCreditsResponse = await fetch(
+              `${process.env.NEXT_PUBLIC_BACKEND_URL}/remaining-credits`,
+              {
+                method: 'GET',
+                credentials: 'include',
+              },
+            )
+            // Handle remaining credits errors
+            if (!userCreditsResponse.ok) {
+              const errorText: Error = await userCreditsResponse.json()
+              console.error('Error getting user credits:', errorText)
+              toast({
+                variant: 'destructive',
+                title: 'Error',
+                description: errorText.error,
+              })
+            }
+            const userCredits: { credits: string } =
+              await userCreditsResponse.json()
+            console.log('User credits:', userCredits)
+            const credits = parseInt(userCredits.credits)
+            // Update credits in the store
+            updateCredits(credits)
             setLoading(false)
             // Handle the completed prediction
           } else if (prediction.status === 'failed') {
