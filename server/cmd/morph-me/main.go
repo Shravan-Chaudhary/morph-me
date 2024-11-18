@@ -123,11 +123,12 @@ func main() {
 	router.POST("/upload", uploadHandler.Upload)
 	router.GET("/self", authMiddleware, userHandler.Self)
 	router.GET("/predictions/:prediction_id", authMiddleware, func(c *gin.Context) {
-		GetPredictionStatus(c, &config)
+		GetPredictionStatusHandler(c, &config)
 	})
 	router.POST("/predictions", authMiddleware, func(c *gin.Context) {
-		Prediction(c, r8, creditRepository)
+		PredictionHandler(c, r8, creditRepository)
 	})
+	router.GET("/remaining-credits", authMiddleware, userHandler.RemainingCredits)
 
 	s := server.NewServer(":8080", router)
 	s.Start()
@@ -138,8 +139,8 @@ type ProcessRequest struct {
 	Style    string `json:"style" binding:"required"`
 }
 
-// Prediction handler
-func Prediction(c *gin.Context, r8 *replicate.Client, creditRepo *respository.CreditRepository) {
+// PredictionHandler handler
+func PredictionHandler(c *gin.Context, r8 *replicate.Client, creditRepo *respository.CreditRepository) {
 	// Get UserID
 	userIDStr := c.MustGet("userID").(string)
 	userID, err := primitive.ObjectIDFromHex(userIDStr)
@@ -231,8 +232,8 @@ func Prediction(c *gin.Context, r8 *replicate.Client, creditRepo *respository.Cr
 	})
 }
 
-// GetPredictionStatus handler
-func GetPredictionStatus(c *gin.Context, config *util.Config) {
+// GetPredictionStatusHandler handler
+func GetPredictionStatusHandler(c *gin.Context, config *util.Config) {
 	url := "https://api.replicate.com/v1/predictions/" + c.Param("prediction_id")
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {

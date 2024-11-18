@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type UserHandler struct{
+type UserHandler struct {
 	userService *service.UserService
 }
 
@@ -25,6 +25,22 @@ func (h *UserHandler) HandleCreateUser(c *gin.Context) {
 	c.JSON(http.StatusOK, user)
 }
 
+func (h *UserHandler) RemainingCredits(c *gin.Context) {
+	email, exists := c.Get("email")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "no access token found", "status": "error"})
+		return
+	}
+
+	user, err := h.userService.GetUserByEmail(c, email.(string))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error(), "status": "error"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"credits": user.Credits})
+
+}
+
 func (h *UserHandler) Self(c *gin.Context) {
 	email, exists := c.Get("email")
 	if !exists {
@@ -38,4 +54,3 @@ func (h *UserHandler) Self(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"user": user})
 }
-
