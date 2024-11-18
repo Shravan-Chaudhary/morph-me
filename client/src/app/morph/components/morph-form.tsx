@@ -17,8 +17,13 @@ import Link from 'next/link'
 import { useState } from 'react'
 import Upload from './upload'
 
+type Error = {
+  error?: string
+  string?: string
+}
+
 const MorphForm = () => {
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<Error | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
   const [selectedStyle, setSelectedStyle] = useState<string>('')
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string>('')
@@ -54,7 +59,7 @@ const MorphForm = () => {
       )
       if (!res.ok) {
         console.error('Response status:', res.status)
-        const errorText = await res.text()
+        const errorText: Error = await res.json()
         console.error('Error response:', errorText)
         setError(errorText)
         if (res.status === 401) {
@@ -67,7 +72,7 @@ const MorphForm = () => {
         toast({
           variant: 'destructive',
           title: 'Error',
-          description: "Couldn't process the image. Please try again.",
+          description: errorText.error,
         })
         return
       }
@@ -87,7 +92,7 @@ const MorphForm = () => {
 
           if (!response.ok) {
             console.error('Response status:', response.status)
-            const errorText = await response.text()
+            const errorText: Error = await response.json()
             console.error('Error response:', errorText)
             setError(errorText)
             toast({
@@ -120,27 +125,34 @@ const MorphForm = () => {
           }
         } catch (error) {
           console.error('Error checking status:', error)
-          const errorMessage =
-            error instanceof Error ? error.message : 'An unknown error occurred'
+          const errorMessage = {
+            error:
+              error instanceof Error
+                ? error.message
+                : 'An unknown error occurred',
+            status: 'error',
+          }
           setError(errorMessage)
           toast({
             variant: 'destructive',
             title: 'Error',
-            description: 'Server error occurred. Please try again.',
+            description: errorMessage.error,
           })
         }
       }
       setTimeout(() => checkStatus(prediction_id), 15000)
     } catch (error) {
       console.error(error)
-      const errorMessage =
-        error instanceof Error ? error.message : 'An unknown error occurred'
-
+      const errorMessage = {
+        error:
+          error instanceof Error ? error.message : 'An unknown error occurred',
+        status: 'error',
+      }
       setError(errorMessage)
       toast({
         variant: 'destructive',
         title: 'Error',
-        description: 'Server error occurred. Please try again.',
+        description: errorMessage.error,
       })
     }
   }
