@@ -49,6 +49,7 @@ const MorphForm = () => {
             image_url: uploadedImageUrl,
             style: selectedStyle,
           }),
+          credentials: 'include',
         },
       )
       if (!res.ok) {
@@ -56,6 +57,13 @@ const MorphForm = () => {
         const errorText = await res.text()
         console.error('Error response:', errorText)
         setError(errorText)
+        if (res.status === 401) {
+          return toast({
+            variant: 'destructive',
+            title: 'Error',
+            description: 'No token found. Please sign in again.',
+          })
+        }
         toast({
           variant: 'destructive',
           title: 'Error',
@@ -73,6 +81,7 @@ const MorphForm = () => {
             `${process.env.NEXT_PUBLIC_BACKEND_URL}/predictions/${prediction_id}`,
             {
               method: 'GET',
+              credentials: 'include',
             },
           )
 
