@@ -65,6 +65,7 @@ const MorphForm = () => {
         console.error('Error response:', errorText)
         setError(errorText)
         if (res.status === 401) {
+          setLoading(false)
           return toast({
             variant: 'destructive',
             title: 'Error',
@@ -76,6 +77,8 @@ const MorphForm = () => {
           title: 'Error',
           description: errorText.error,
         })
+
+        setLoading(false)
         return
       }
       const { status, prediction_id } = await res.json()
@@ -102,6 +105,8 @@ const MorphForm = () => {
               title: 'Error',
               description: 'Server error occurred. Please try again.',
             })
+
+            setLoading(false)
             return
           }
 
@@ -128,6 +133,9 @@ const MorphForm = () => {
                 title: 'Error',
                 description: errorText.error,
               })
+
+              setLoading(false)
+              return
             }
             const userCredits: { credits: string } =
               await userCreditsResponse.json()
@@ -145,6 +153,9 @@ const MorphForm = () => {
               title: 'Processing Failed',
               description: prediction.error,
             })
+
+            setLoading(false)
+            return
           } else {
             // Continue polling
             setTimeout(() => checkStatus(prediction_id), 2000) // Poll every 2 seconds
@@ -164,6 +175,9 @@ const MorphForm = () => {
             title: 'Error',
             description: errorMessage.error,
           })
+
+          setLoading(false)
+          return
         }
       }
       setTimeout(() => checkStatus(prediction_id), 15000)
@@ -180,6 +194,9 @@ const MorphForm = () => {
         title: 'Error',
         description: errorMessage.error,
       })
+
+      setLoading(false)
+      return
     }
   }
 
