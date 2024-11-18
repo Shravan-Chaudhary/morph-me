@@ -30,6 +30,7 @@ const LoginCard = () => {
             variant: 'destructive',
             title: 'Error',
             description: 'Error Loggin in. Please try again.',
+            duration: 2000,
           })
           return
         }
@@ -41,6 +42,7 @@ const LoginCard = () => {
           variant: 'destructive',
           title: 'Error',
           description: 'Error Loggin in. Please try again.',
+          duration: 2000,
         })
       }
     },
@@ -50,6 +52,7 @@ const LoginCard = () => {
         variant: 'destructive',
         title: 'Error',
         description: 'Error Loggin in. Please try again.',
+        duration: 2000,
       })
     },
     flow: 'auth-code',

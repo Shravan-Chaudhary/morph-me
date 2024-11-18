@@ -70,12 +70,14 @@ const MorphForm = () => {
             variant: 'destructive',
             title: 'Error',
             description: 'No token found. Please sign in again.',
+            duration: 2000,
           })
         }
         toast({
           variant: 'destructive',
           title: 'Error',
           description: errorText.error,
+          duration: 2000,
         })
 
         setLoading(false)
@@ -104,6 +106,7 @@ const MorphForm = () => {
               variant: 'destructive',
               title: 'Error',
               description: 'Server error occurred. Please try again.',
+              duration: 2000,
             })
 
             setLoading(false)
@@ -132,6 +135,7 @@ const MorphForm = () => {
                 variant: 'destructive',
                 title: 'Error',
                 description: errorText.error,
+                duration: 2000,
               })
 
               setLoading(false)
@@ -152,6 +156,7 @@ const MorphForm = () => {
               variant: 'destructive',
               title: 'Processing Failed',
               description: prediction.error,
+              duration: 2000,
             })
 
             setLoading(false)
@@ -174,6 +179,7 @@ const MorphForm = () => {
             variant: 'destructive',
             title: 'Error',
             description: errorMessage.error,
+            duration: 2000,
           })
 
           setLoading(false)
@@ -193,6 +199,7 @@ const MorphForm = () => {
         variant: 'destructive',
         title: 'Error',
         description: errorMessage.error,
+        duration: 2000,
       })
 
       setLoading(false)

@@ -34,6 +34,7 @@ const ProfileButton = () => {
         variant: 'destructive',
         title: 'Error',
         description: 'Error logging out',
+        duration: 2000,
       })
     }
   }
@@ -50,6 +51,7 @@ const ProfileButton = () => {
             variant: 'destructive',
             title: 'Error',
             description: 'Error fetching user details',
+            duration: 2000,
           })
           return
         }
@@ -60,6 +62,7 @@ const ProfileButton = () => {
           variant: 'destructive',
           title: 'Error',
           description: 'Error fetching user details',
+          duration: 2000,
         })
       }
     }
