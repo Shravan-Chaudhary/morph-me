@@ -144,7 +144,7 @@ func Prediction(c *gin.Context, r8 *replicate.Client, creditRepo *respository.Cr
 	userIDStr := c.MustGet("userID").(string)
 	userID, err := primitive.ObjectIDFromHex(userIDStr)
 	if err != nil {
-		c.JSON(500, gin.H{"error": "Internal server error", "message": "Invalid user ID"})
+		c.JSON(500, gin.H{"error": err.Error(), "status": "error"})
 		return
 	}
 
@@ -152,7 +152,7 @@ func Prediction(c *gin.Context, r8 *replicate.Client, creditRepo *respository.Cr
 	session, err := creditRepo.Client.StartSession()
 	if err != nil {
 		fmt.Println("session creation", err)
-		c.JSON(500, gin.H{"error": "Internal server error"})
+		c.JSON(500, gin.H{"error": "Internal server error", "status": "error"})
 		return
 	}
 	defer session.EndSession(c.Request.Context())
@@ -236,21 +236,21 @@ func GetPredictionStatus(c *gin.Context, config *util.Config) {
 	url := "https://api.replicate.com/v1/predictions/" + c.Param("prediction_id")
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error(), "status": "error"})
 		return
 	}
 	req.Header.Set("Authorization", "Token "+config.REPLICATE_TOKEN)
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error(), "status": "error"})
 		return
 	}
 	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error(), "status": "error"})
 		return
 	}
 
