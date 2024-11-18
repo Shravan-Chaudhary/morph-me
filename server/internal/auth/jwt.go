@@ -31,7 +31,7 @@ func SignJWT(jwtSecret string, user *model.User) (string, error) {
 }
 
 // ParseJWT parses and validates the JWT token
-func ParseJWT(tokenString string, jwtSecret string) (string, error) {
+func ParseJWT(tokenString string, jwtSecret string) (string, string, error) {
 	// Parse the token
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
@@ -41,17 +41,21 @@ func ParseJWT(tokenString string, jwtSecret string) (string, error) {
 	})
 
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 
-		// Check if the token is valid and extract claims
+	// Check if the token is valid and extract claims
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		email, ok := claims["email"].(string)
 		if !ok {
-			return "", errors.New("email claim not found")
+			return "", "", errors.New("email claim not found")
 		}
-		return email, nil
+		userID, ok := claims["sub"].(string)
+		if !ok {
+			return "", "", errors.New("sub claim not found")
+		}
+		return email, userID, nil
 	}
 
-	return "", errors.New("invalid token")
+	return "", "", errors.New("invalid token")
 }
