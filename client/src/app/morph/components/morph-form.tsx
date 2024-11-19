@@ -11,12 +11,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { useUserStore } from '@/stores/user-store'
 import { Download, Share2 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
 import Upload from './upload'
-import { useUserStore } from '@/stores/user-store'
 
 type Error = {
   error?: string
@@ -30,7 +30,9 @@ const MorphForm = () => {
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string>('')
   const [processedImageUrl, setProcessedImageUrl] = useState<string>('')
   const { toast } = useToast()
-  const { updateCredits } = useUserStore()
+  const { user, updateCredits } = useUserStore()
+
+  const disabled = user ? user.credits < 1 && true : false
 
   const handleUploadComplete = (url: string) => {
     setUploadedImageUrl(url)
@@ -242,12 +244,28 @@ const MorphForm = () => {
                   onClick={handleTransform}
                   size='lg'
                   className='rounded-full px-6 w-full max-w-sm md:max-w-[200px]'
-                  disabled={!uploadedImageUrl || !selectedStyle || loading}
+                  disabled={
+                    !uploadedImageUrl || !selectedStyle || loading || disabled
+                  }
                 >
                   <span className='text-base'>Transform</span>
 
                   <Icons.sparkles className='size-5 ml-2' />
                 </Button>
+                {user
+                  ? user.credits < 1 && (
+                      <div className='flex items-center justify-center mt-3'>
+                        <span className='text-red-500 font-medium text-sm md:text-base cursor-default'>
+                          Insufficient Credits{' '}
+                        </span>
+                        <Link href='buy-credits'>
+                          <span className='font-medium text-sm md:text-base ml-2 text-primary hover:underline transition-all duration-100 cursor-pointer'>
+                            Buy from here
+                          </span>
+                        </Link>
+                      </div>
+                    )
+                  : ''}
               </Link>
             </div>
             {/* Right Column */}

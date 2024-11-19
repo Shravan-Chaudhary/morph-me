@@ -4,7 +4,14 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { cn } from '@/lib/utils'
-import { Check, OctagonAlert, Trash2, Upload as UploadIcon } from 'lucide-react'
+import { useUserStore } from '@/stores/user-store'
+import {
+  BadgeCent,
+  Check,
+  OctagonAlert,
+  Trash2,
+  Upload as UploadIcon,
+} from 'lucide-react'
 import Image from 'next/image'
 import { useState } from 'react'
 
@@ -19,6 +26,7 @@ export default function Upload({ onUploadComplete, onDelete }: UploadProps) {
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
   const [progress, setProgress] = useState(0)
+  const { user } = useUserStore()
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files?.[0]) {
@@ -56,6 +64,11 @@ export default function Upload({ onUploadComplete, onDelete }: UploadProps) {
           return prev + 10
         })
       }, 200)
+
+      if (user!.credits < 1) {
+        setMessage('Insufficient credits.')
+        return
+      }
 
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/upload`,
@@ -100,6 +113,15 @@ export default function Upload({ onUploadComplete, onDelete }: UploadProps) {
                   />
                 </div>
                 <div className='flex items-center justify-between'>
+                  {message.startsWith('Insufficient credits.') && (
+                    <div className='flex items-center space-x-2'>
+                      <BadgeCent className='size-4 text-green-600' />
+
+                      <span className='text-sm font-medium text-red-500'>
+                        Insufficient Credits.
+                      </span>
+                    </div>
+                  )}
                   {message.startsWith('uploaded successfully!') && (
                     <div className='flex items-center space-x-2'>
                       <div className='size-7 rounded bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center'>
