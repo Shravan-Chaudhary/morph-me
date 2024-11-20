@@ -279,4 +279,4 @@ func GetPredictionStatusHandler(c *gin.Context, config *util.Config) {
 // Production
 // 1. Google OAuth from test to production
 // 2. Gin Mode to release
-// 3. Production Database
+// 3. Production Databas#
