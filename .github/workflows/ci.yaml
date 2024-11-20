@@ -27,7 +27,8 @@ jobs:
 
       - name: Build and push
         run: |
-          cd server
-          docker build -t ${{env.IMAGE_NAME}}:${{env.IMAGE_TAG}} -f ./server/Dockerfile .
+          ls -la  # Debug: List files to verify checkout
+          docker build -t ${{env.IMAGE_NAME}}:${{env.IMAGE_TAG}} -f Dockerfile ./server
+        working-directory: ./server
       - name: Push Docker image to Dockerhub
         run: docker push ${{env.IMAGE_NAME}}:${{env.IMAGE_TAG}}
