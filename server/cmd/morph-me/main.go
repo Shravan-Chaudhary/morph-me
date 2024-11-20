@@ -76,6 +76,10 @@ func main() {
 		log.Fatalf("Failed to create Replicate client: %v", err)
 	}
 
+	if config.NODE_ENV == "production" {
+		gin.SetMode(gin.ReleaseMode)
+	}
+
 	// Router
 	router := gin.Default()
 	corsconfig := cors.DefaultConfig()
@@ -260,11 +264,19 @@ func GetPredictionStatusHandler(c *gin.Context, config *util.Config) {
 	c.Writer.Write(body)
 }
 
-// 1. Credits endpoint
+// 1. Check for file type
 // 2. Session endpoint
 // 3. Self endpoint
+// 4. Stuctured logging and store logs
+// 5. Remove fmt's
+// 6. Production Dockerfile
+// 7. Check for secrets in code replace with env vars
 
 // Frontend
-// 1. Implement proper error message for insufficient credits
 // 2. Frontend check for credits (if credits < 1, disable button)
-// 3. Enable transform button after an error.
+// 3. Check for file type before uploading
+
+// Production
+// 1. Google OAuth from test to production
+// 2. Gin Mode to release
+// 3. Production Database
