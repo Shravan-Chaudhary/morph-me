@@ -3,9 +3,10 @@ import * as cookie from 'cookie'
 import { cookies } from 'next/headers'
 
 export default async function auth(code: string) {
+  const cookieStore = cookies()
   try {
     const res = await fetch(
-      `${process.env.BASE_URL}/auth/google/callback?code=${code}`,
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/google/callback?code=${code}`,
       {
         method: 'GET',
         headers: {
@@ -39,13 +40,13 @@ export default async function auth(code: string) {
       }
     }
 
-    cookies().set({
+    cookieStore.set({
       name: 'accessToken',
       value: parsedAccessToken.accessToken as string,
       maxAge: 2592000,
       path: '/',
       domain: '', // TODO: Change this to new domain after deployment
-      secure: false,
+      secure: true,
       httpOnly: true,
     })
 

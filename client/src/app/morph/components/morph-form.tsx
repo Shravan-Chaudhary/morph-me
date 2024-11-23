@@ -252,21 +252,22 @@ const MorphForm = () => {
 
                   <Icons.sparkles className='size-5 ml-2' />
                 </Button>
-                {user
-                  ? user.credits < 1 && (
-                      <div className='flex items-center justify-center mt-3'>
-                        <span className='text-red-500 font-medium text-sm md:text-base cursor-default'>
-                          Insufficient Credits{' '}
-                        </span>
-                        <Link href='buy-credits'>
-                          <span className='font-medium text-sm md:text-base ml-2 text-primary hover:underline transition-all duration-100 cursor-pointer'>
-                            Buy from here
-                          </span>
-                        </Link>
-                      </div>
-                    )
-                  : ''}
               </Link>
+              {user
+                ? user.credits < 1 && (
+                    <div className='flex items-center justify-center mt-3'>
+                      <span className='text-red-500 font-medium text-sm md:text-base cursor-default'>
+                        Insufficient Credits{' '}
+                      </span>
+                      <Link
+                        href='/buy-credits'
+                        className='font-medium text-sm md:text-base ml-2 text-primary hover:underline transition-all duration-100 cursor-pointer'
+                      >
+                        Buy from here
+                      </Link>
+                    </div>
+                  )
+                : ''}
             </div>
             {/* Right Column */}
             <div className='md:col-span-6 text-center flex flex-col gap-8 items-center justify-center'>

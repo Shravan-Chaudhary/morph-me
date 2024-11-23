@@ -1,5 +1,5 @@
 import Icons from '@/components/global/icons'
-import { Heart } from 'lucide-react'
+import { Github, Heart, Linkedin, Twitter, X } from 'lucide-react'
 import Link from 'next/link'
 
 const Footer = () => {
@@ -23,6 +23,20 @@ const Footer = () => {
           <span className='mt-4 text-neutral-800 text-sm flex items-center'>
             Created by Shravan 👾
           </span>
+          <div className='mt-3 flex gap-5 justify-center items-center'>
+            <Link href='https://github.com/Shravan-Chaudhary' target='_blank'>
+              <Github className='size-5' />
+            </Link>
+            <Link
+              href='https://www.linkedin.com/in/shravan-chaudhary/'
+              target='_blank'
+            >
+              <Linkedin className='size-5' />
+            </Link>
+            <Link href='https://x.com/10xshravan' target='_blank'>
+              <Twitter className='size-5' />
+            </Link>
+          </div>
         </div>
 
         <div className='grid-cols-2 gap-8 grid mt-16 xl:col-span-2 xl:mt-0'>

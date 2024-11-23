@@ -17,9 +17,9 @@ export const SITE_CONFIG: Metadata = {
     ],
   },
   openGraph: {
-    title: 'Astra - AI Powered Website Builder',
+    title: 'MorphMe - Effortless AI-Powered Transformations',
     description:
-      'Astra is an AI powered website builder that helps you create a website in minutes. No coding skills required. Get started for free!',
+      'MorphMe is an AI powered website builder that helps you create a website in minutes. No coding skills required. Get started for free!',
     images: [
       {
         url: '/assets/og-image.png',
@@ -38,5 +38,5 @@ export const SITE_CONFIG: Metadata = {
       },
     ],
   },
-  metadataBase: new URL('https://astra-app.vercel.app'),
+  metadataBase: new URL('https://morph-me.vercel.app'),
 }
