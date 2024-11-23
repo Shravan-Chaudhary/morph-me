@@ -12,19 +12,18 @@ import (
 )
 
 type GoogleOAuthHandler struct {
-	userService *service.UserService
+	userService       *service.UserService
 	googleOauthConfig *oauth2.Config
-	jwtSecret string
+	jwtSecret         string
 }
 
 func NewGoogleOAuthHandler(userService *service.UserService, googleOauthConfig *oauth2.Config, jwtSecret string) *GoogleOAuthHandler {
 	return &GoogleOAuthHandler{
-		userService: userService,
+		userService:       userService,
 		googleOauthConfig: googleOauthConfig,
-		jwtSecret: jwtSecret,
+		jwtSecret:         jwtSecret,
 	}
 }
-
 
 func (h *GoogleOAuthHandler) GoogleCallBackHandler(c *gin.Context) {
 	code := c.Query("code")
@@ -62,10 +61,10 @@ func (h *GoogleOAuthHandler) GoogleCallBackHandler(c *gin.Context) {
 		"accessToken",
 		signedToken,
 		2592000, //  MaxAge (30 days)
-		"/", // Path
-		"", // Domain
-		false, // Secure
-		true, // HttpOnly
+		"/",     // Path
+		"",      // Domain
+		true,    // Secure
+		true,    // HttpOnly
 	)
-	c.JSON(http.StatusOK, gin.H{"success": "true","message": "Successfully logged in"})
+	c.JSON(http.StatusOK, gin.H{"success": "true", "message": "Successfully logged in"})
 }

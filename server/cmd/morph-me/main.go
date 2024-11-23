@@ -82,8 +82,15 @@ func main() {
 
 	// Router
 	router := gin.Default()
+	router.Use(func(c *gin.Context) {
+		slog.Debug("Request headers",
+			"origin", c.GetHeader("Origin"),
+			"cookie", c.GetHeader("Cookie"),
+		)
+		c.Next()
+	})
 	corsconfig := cors.DefaultConfig()
-	corsconfig.AllowOrigins = []string{config.CLIENT_URL, "http://localhost:5173"}
+	corsconfig.AllowOrigins = []string{config.CLIENT_URL, "https://morph-me.vercel.app", "http://localhost:3000"}
 	corsconfig.AllowMethods = []string{"GET", "POST", "OPTIONS", "PUT", "PATCH", "DELETE"}
 	corsconfig.AllowHeaders = []string{
 		"Origin",

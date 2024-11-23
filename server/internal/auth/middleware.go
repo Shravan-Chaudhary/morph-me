@@ -1,6 +1,8 @@
 package auth
 
 import (
+	"fmt"
+	"log/slog"
 	"net/http"
 	"strings"
 
@@ -12,7 +14,11 @@ func AuthMiddleware(jwtSecret string) gin.HandlerFunc {
 		//  Get the cookie set by Next.js
 		var token string
 		token, err := c.Cookie("accessToken")
+		slog.Debug("debug ", slog.String("token", token))
+		fmt.Println("token", token)
 		if err != nil {
+			slog.Debug("Error getting accesstoken from cookie", err)
+			fmt.Println("Error getting accesstoken from cookie", err)
 			authHeader := c.GetHeader("Authorization")
 			if authHeader == "" {
 				c.JSON(http.StatusUnauthorized, gin.H{

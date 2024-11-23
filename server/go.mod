@@ -1,6 +1,6 @@
 module morph-me
 
-go 1.23.2
+go 1.22
 
 require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.66.3
