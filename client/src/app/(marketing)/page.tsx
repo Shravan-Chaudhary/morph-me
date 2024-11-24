@@ -1,11 +1,23 @@
 import { Container, Wrapper } from '@/components'
+import { ImageCarousel } from '@/components/global/image-carousel'
+import { TweetCard } from '@/components/global/tweet-card'
 import { AnimatedShinyPill } from '@/components/ui/animated-shiny-pill'
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 import Marquee from '@/components/ui/marquee'
 import SectionBadge from '@/components/ui/section-badge'
+import { Separator } from '@/components/ui/separator'
 import SparklesText from '@/components/ui/sparkles-text'
-import { features, process, reviews } from '@/constants'
-import { ArrowRight, User } from 'lucide-react'
+import { features, process, reviews, tweetData } from '@/constants'
+import {
+  ArrowRight,
+  Camera,
+  Palette,
+  Sparkles,
+  Upload,
+  User,
+  Wand2,
+} from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -83,7 +95,7 @@ const HomePage = () => {
       {/* Process */}
       <Wrapper className='max-w-6xl flex flex-col items-center justify-center px-4 md:px-2 py-12 relative'>
         <Container>
-          <div className='max-w-md px-2 md:mx-auto text-start md:text-center'>
+          <div className='max-w-md md:mx-auto text-start md:text-center'>
             <SectionBadge title='The Process' />
             <h2 className='text-3xl lg:text-4xl font-semibold mt-6'>
               Three steps to build you a new face
@@ -94,34 +106,86 @@ const HomePage = () => {
           </div>
         </Container>
         <Container>
-          <div className='flex flex-col items-center justify-center py-10 md:py-20 w-full'>
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full divide-x-0 md:divide-x divide-y md:divide-y-0 divide-gray-900 lg:first:border-none first:border-gray-900'>
-              {process.map((perk) => (
-                <div
-                  key={perk.title}
-                  className='flex flex-col items-start px-4 py-4 md:px-6 lg:px-8 lg:py-6'
-                >
-                  <div className='flex items-center justify-center'>
-                    <perk.icon className='w-8 h-8' />
-                  </div>
-                  <h3 className='text-lg font-medium mt-4'>{perk.title}</h3>
-                  <p className='text-muted-foreground mt-2 text-start'>
-                    {perk.info}
-                  </p>
+          <div className='py-20'>
+            <div className='grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0'>
+              <div className='flex flex-col items-start text-left px-0 py-6 md:p-6 relative md:py-[27px]'>
+                <p className='text-lg font-semibold mb-4 text-neutral-800'>
+                  Step 1
+                </p>
+                <Card className='w-16 h-16 flex items-center justify-center bg-purple-100 mb-4'>
+                  <CardContent className='p-0'>
+                    <Camera className='w-8 h-8 text-neutral-600' />
+                  </CardContent>
+                </Card>
+                <h2 className='text-xl font-semibold mb-3 text-primary'>
+                  Upload a Photo
+                </h2>
+                <p className='text-muted-foreground'>
+                  Take or upload a photo of yourself to get started.
+                </p>
+                {/* Separator for medium and large screens */}
+                <div className='hidden md:block absolute right-0 top-6 bottom-6'>
+                  <Separator orientation='vertical' className='h-full' />
                 </div>
-              ))}
+                {/* Separator for mobile */}
+                <div className='md:hidden w-full mt-4'>
+                  <Separator className='w-full' />
+                </div>
+              </div>
+
+              <div className='flex flex-col items-start text-left px-0 py-6 md:p-6 relative'>
+                <p className='text-lg font-semibold mb-4 text-neutral-800'>
+                  Step 2
+                </p>
+                <Card className='w-16 h-16 flex items-center justify-center bg-purple-100 mb-4'>
+                  <CardContent className='p-0'>
+                    <Palette className='w-8 h-8 text-gray-600' />
+                  </CardContent>
+                </Card>
+                <h2 className='text-xl font-semibold mb-3 text-primary'>
+                  Choose a Style
+                </h2>
+                <p className='text-muted-foreground'>
+                  Select from a collection of artistic styles for your photo.
+                </p>
+                {/* Separator for large screens only */}
+                <div className='hidden lg:block absolute right-0 top-6 bottom-6'>
+                  <Separator orientation='vertical' className='h-full' />
+                </div>
+                {/* Separator for mobile */}
+                <div className='md:hidden w-full mt-4'>
+                  <Separator className='w-full' />
+                </div>
+              </div>
+
+              <div className='flex flex-col items-start text-left px-0 py-6 md:p-6'>
+                <p className='text-lg font-semibold mb-4 text-neutral-800'>
+                  Step 3
+                </p>
+                <Card className='w-16 h-16 flex items-center justify-center bg-amber-100 mb-4'>
+                  <CardContent className='p-0'>
+                    <Wand2 className='w-8 h-8 text-amber-600' />
+                  </CardContent>
+                </Card>
+                <h2 className='text-xl font-semibold mb-3 text-primary'>
+                  Witness the Transformation
+                </h2>
+                <p className='text-muted-foreground'>
+                  Our A.I transforms your photo into a unique piece of art.
+                </p>
+              </div>
             </div>
           </div>
         </Container>
       </Wrapper>
 
-      {/* Features */}
+      {/* Examples */}
       <Wrapper className='max-w-6xl flex flex-col items-center justify-center px-4 md:px-2 py-12 relative'>
         <Container>
           <div className='max-w-md md:mx-auto text-start md:text-center'>
-            <SectionBadge title='Features' />
+            <SectionBadge title='Examples' />
             <h2 className='text-3xl lg:text-4xl font-semibold mt-6'>
-              Powerful Transformation, Streamlined Experience
+              Transformations MorphMe Generated
             </h2>
             <p className='text-muted-foreground mt-6'>
               Transform you photos with powerful AI technology - no complex
@@ -134,26 +198,7 @@ const HomePage = () => {
         </Container>
         <Container>
           <div className='flex flex-col items-center justify-center py-10 md:py-20 w-full'>
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full gap-8'>
-              {features.map((feature) => (
-                <div
-                  key={feature.title}
-                  className='bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow'
-                >
-                  <div className='bg-gray-50 w-16 h-16 rounded-full flex items-center justify-center mb-4'>
-                    {feature.icon && (
-                      <feature.icon className='w-8 h-8 text-primary' />
-                    )}
-                  </div>
-                  <h3 className='text-lg font-semibold mb-2'>
-                    {feature.title}
-                  </h3>
-                  <p className='text-muted-foreground text-sm'>
-                    {feature.info}
-                  </p>
-                </div>
-              ))}
-            </div>
+            <ImageCarousel />
           </div>
         </Container>
       </Wrapper>
@@ -177,55 +222,41 @@ const HomePage = () => {
           <div className='py-10 md:py-20 w-full'>
             <div className='relative flex h-full w-full flex-col items-center justify-center overflow-hidden py-10'>
               <Marquee pauseOnHover className='[--duration:20s] select-none'>
-                {firstRow.map((review) => (
+                {tweetData.map((tweet) => (
                   <figure
-                    key={review.name}
-                    className='relative w-64 cursor-pointer overflow-hidden rounded-xl border p-4 border-zinc-500/[.1] bg-background hover:bg-zinc-500/[.15]'
+                    key={tweet.id}
+                    className='relative w-64 cursor-pointer overflow-hidden rounded-xl border-zinc-500/[.1] bg-background'
                   >
-                    <div className='flex flex-row items-center gap-2'>
-                      <User className='w-6 h-6' />
-                      <div className='flex flex-col'>
-                        <figcaption className='text-sm font-medium'>
-                          {review.name}
-                        </figcaption>
-                        <p className='text-xs font-medium text-muted-foreground'>
-                          {review.username}
-                        </p>
-                      </div>
-                    </div>
-                    <blockquote className='mt-2 text-sm'>
-                      {review.body}
-                    </blockquote>
+                    <TweetCard
+                      key={tweet.id}
+                      author={tweet.author}
+                      handle={tweet.handle}
+                      content={tweet.content}
+                      image={tweet.image}
+                    />
                   </figure>
                 ))}
               </Marquee>
-              <Marquee
+              {/* <Marquee
                 reverse
                 pauseOnHover
                 className='[--duration:20s] select-none'
               >
-                {secondRow.map((review) => (
+                {tweetData.map((tweet) => (
                   <figure
-                    key={review.name}
-                    className='relative w-64 cursor-pointer overflow-hidden rounded-xl border p-4 border-zinc-500/[.1] bg-background hover:bg-zinc-500/[.15]'
+                    key={tweet.id}
+                    className='relative w-64 cursor-pointer overflow-hidden rounded-xl border-zinc-500/[.1] bg-background'
                   >
-                    <div className='flex flex-row items-center gap-2'>
-                      <User className='w-6 h-6' />
-                      <div className='flex flex-col'>
-                        <figcaption className='text-sm font-medium'>
-                          {review.name}
-                        </figcaption>
-                        <p className='text-xs font-medium text-muted-foreground'>
-                          {review.username}
-                        </p>
-                      </div>
-                    </div>
-                    <blockquote className='mt-2 text-sm'>
-                      {review.body}
-                    </blockquote>
+                    <TweetCard
+                      key={tweet.id}
+                      author={tweet.author}
+                      handle={tweet.handle}
+                      content={tweet.content}
+                      image={tweet.image}
+                    />
                   </figure>
                 ))}
-              </Marquee>
+              </Marquee> */}
               {/* Fade */}
               <div className='pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-background'></div>
               <div className='pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-background'></div>

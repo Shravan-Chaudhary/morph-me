@@ -163,3 +163,54 @@ export const reviews = [
     body: "I'm at a loss for words. This is amazing. I love it.",
   },
 ]
+
+export const tweetData = [
+  {
+    id: 1,
+    author: 'Dillion',
+    handle: '@dillionverma',
+    content:
+      'I built @reactjs + @tailwindcss components for you to do the same in hours',
+    image: '/placeholder.svg',
+  },
+  {
+    id: 2,
+    author: 'Alice',
+    handle: '@alice',
+    content:
+      'Just launched my new project! Excited to share it with everyone. #webdev #launch',
+    image: '/placeholder.svg',
+  },
+  {
+    id: 3,
+    author: 'Bob',
+    handle: '@bob',
+    content:
+      'The future of AI is here. What are your thoughts on the latest developments? #AI #tech',
+    image: '/placeholder.svg',
+  },
+  {
+    id: 4,
+    author: 'Charlie',
+    handle: '@charlie',
+    content:
+      "Remote work has changed everything. How's it going for you? Share your experiences! #remotework",
+    image: '/placeholder.svg',
+  },
+  {
+    id: 5,
+    author: 'David',
+    handle: '@david',
+    content:
+      'Just finished a 30-day coding challenge! Learned so much in the process. #100DaysOfCode',
+    image: '/placeholder.svg',
+  },
+  {
+    id: 6,
+    author: 'Eve',
+    handle: '@eve',
+    content:
+      'Excited to speak at the upcoming tech conference! Who else is attending? #publicspeaking #techconf',
+    image: '/placeholder.svg',
+  },
+]
