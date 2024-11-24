@@ -45,14 +45,15 @@ export default async function auth(code: string) {
       value: parsedAccessToken.accessToken as string,
       maxAge: 2592000,
       path: '/',
-      domain: '', // TODO: Change this to new domain after deployment
       secure: true,
       httpOnly: true,
+      sameSite: 'none',
     })
 
     return {
       type: 'success',
       message: parsedAccessToken,
+      token: parsedAccessToken.accessToken,
     }
   } catch (error) {
     return {
