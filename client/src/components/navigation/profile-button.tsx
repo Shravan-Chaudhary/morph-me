@@ -26,6 +26,7 @@ const ProfileButton = () => {
   const handleLogout = async () => {
     try {
       await logout()
+      localStorage.setItem('accessToken', '')
       update(null)
       router.push('/')
     } catch (error) {
@@ -45,6 +46,10 @@ const ProfileButton = () => {
         const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/self`, {
           method: 'GET',
           credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+          },
         })
         if (!res.ok) {
           toast({

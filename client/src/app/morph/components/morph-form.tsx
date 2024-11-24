@@ -53,6 +53,7 @@ const MorphForm = () => {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
           },
           body: JSON.stringify({
             image_url: uploadedImageUrl,
@@ -96,6 +97,10 @@ const MorphForm = () => {
             {
               method: 'GET',
               credentials: 'include',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+              },
             },
           )
 
@@ -127,6 +132,12 @@ const MorphForm = () => {
               {
                 method: 'GET',
                 credentials: 'include',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${localStorage.getItem(
+                    'accessToken',
+                  )}`,
+                },
               },
             )
             // Handle remaining credits errors
