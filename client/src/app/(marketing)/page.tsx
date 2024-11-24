@@ -4,21 +4,13 @@ import { TweetCard } from '@/components/global/tweet-card'
 import { AnimatedShinyPill } from '@/components/ui/animated-shiny-pill'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import { Compare } from '@/components/ui/compare'
 import Marquee from '@/components/ui/marquee'
 import SectionBadge from '@/components/ui/section-badge'
 import { Separator } from '@/components/ui/separator'
 import SparklesText from '@/components/ui/sparkles-text'
-import { features, process, reviews, tweetData } from '@/constants'
-import {
-  ArrowRight,
-  Camera,
-  Palette,
-  Sparkles,
-  Upload,
-  User,
-  Wand2,
-} from 'lucide-react'
-import Image from 'next/image'
+import { reviews, tweetData } from '@/constants'
+import { ArrowRight, Camera, Palette, Wand2 } from 'lucide-react'
 import Link from 'next/link'
 
 const HomePage = () => {
@@ -30,62 +22,70 @@ const HomePage = () => {
       {/* Hero */}
       <Wrapper>
         {/* <div className='absolute inset-0 dark:bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[linear-gradient(to_right,#161616_1px,transparent_1px),linear-gradient(to_bottom,#161616_1px,transparent_1px)] bg-[size:5rem_5rem] md:bg-[size:6rem_6rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_100%)] -z-100 h-[150vh] opacity-5' /> */}
-        <Container className='z-10'>
-          <div className='flex flex-col items-center justify-center py-16 md:py-20 w-full'>
-            <AnimatedShinyPill />
-            <div className='flex flex-col items-center mt-8 max-w-3xl mx-auto w-11/12 md:w-full'>
-              <h1 className='text-4xl md:text-5xl md:!leading-snug font-semibold text-center bg-clip-text'>
-                Transform Your Face with
-                <br />
-                <SparklesText
-                  text='AI Magic'
-                  className='font-semibold md:mt-2'
-                />
-              </h1>
-              <p className='text-base md:text-lg font-medium md:font-semibold text-foreground/70 mt-7 text-center'>
-                Upload a selfie and watch AI create amazing variations of your
-                look. Fast, fun, and incredibly easy to use.
-              </p>
-              <div className='flex relative items-center justify-center mt-8 md:mt-12 w-full'>
-                <Link
-                  href='/morph'
-                  className='flex items-center justify-center w-max rounded-full border border-gray-300 bg-white/90 hover:bg-gray-50 px-2 py-1 md:py-2 md:gap-8 shadow-md hover:shadow-lg transition-all cursor-pointer select-none'
-                >
-                  <p className='text-foreground/85 text-base text-center md:text-lg font-medium pl-4 pr-4 lg:marker:pr-0'>
-                    Transform your face now ✨
-                  </p>
-                  <Button
-                    size='sm'
-                    className='rounded-full hidden lg:flex border border-foreground/20'
+        <Container className='z-10 mb-16'>
+          <div className='flex flex-col items-center justify-center py-12 md:py-24 w-full'>
+            <div className='grid md:grid-cols-2 gap-8 items-center mt-8 max-w-6xl mx-auto w-11/12 md:w-full'>
+              {/* Left side - Text content */}
+              <div className='flex flex-col items-center justify-center md:items-start'>
+                <div className='mb-8 w-full flex items-center justify-center md:mb-10'>
+                  <AnimatedShinyPill />
+                </div>
+                <h1 className='text-4xl md:text-5xl md:!leading-snug font-semibold bg-clip-text text-center'>
+                  Transform Your Face with
+                  <br />
+                  <SparklesText
+                    text='AI Magic'
+                    className='font-semibold md:mt-2'
+                  />
+                </h1>
+                <p className='text-base md:text-lg font-medium md:font-semibold text-foreground/70 mt-7 text-center'>
+                  Upload a selfie and watch AI create amazing variations of your
+                  look. Fast, fun, and incredibly easy to use.
+                </p>
+                <div className='flex relative items-center justify-start mt-8 md:mt-12'>
+                  <Link
+                    href='/morph'
+                    className='flex items-center justify-center w-max rounded-full border border-gray-300 bg-white/90 hover:bg-gray-50 px-2 py-1 md:py-2 md:gap-8 shadow-md hover:shadow-lg transition-all cursor-pointer select-none'
                   >
-                    Start Morphing
-                    <ArrowRight className='w-4 h-4 ml-1' />
-                  </Button>
-                </Link>
+                    <p className='text-foreground/85 text-base text-center md:text-lg font-medium pl-4 pr-4 lg:marker:pr-0'>
+                      Transform your face now ✨
+                    </p>
+                    <Button
+                      size='sm'
+                      className='rounded-full hidden lg:flex border border-foreground/20'
+                    >
+                      Start Morphing
+                      <ArrowRight className='w-4 h-4 ml-1' />
+                    </Button>
+                  </Link>
+                </div>
               </div>
-            </div>
-            {/* Image and Gradient */}
-            <div className='relative w-full max-w-6xl mx-auto px-4 md:px-8 py-10 md:py-14'>
-              {/* Gradient */}
-              {/* previous classes: absolute top-1/2 left-1/2 -z-10 gradient w-3/4 -translate-x-1/2 -translate-y-1/2 h-3/4 inset-0 blur-[10rem] */}
-              <div className='absolute top-1/2 left-1/2 -z-10 gradient w-3/4 -translate-x-1/2 -translate-y-1/2 h-3/4 inset-0 blur-[10rem]'></div>
-              <div className='hidden md:inline-flex relative bg-white/0 py-10 rounded-2xl w-full h-full border-none  '>
-                <Image
-                  src='/assets/hero-image.svg'
-                  alt='sample-image'
-                  width={1400}
-                  height={1400}
-                  className='rounded-2xl'
-                />
-                {/* <BorderBeam size={250} duration={12} delay={9} /> */}
-              </div>
-              <div className='md:hidden mt-5 bg-white/5 px-4 py-10 rounded-2xl w-full h-full border-none'>
-                <Image
-                  src='/assets/hero-image.svg'
-                  alt='sample-image'
-                  width={1400}
-                  height={2000}
-                />
+
+              {/* Right side - Compare component */}
+              <div className='relative w-full flex items-center justify-center'>
+                {/* Gradient */}
+                <div className='absolute top-1/2 left-1/2 -z-10 gradient w-3/4 -translate-x-1/2 -translate-y-1/2 h-3/4 inset-0 blur-[10rem]'></div>
+
+                <div className='hidden md:flex relative bg-white/0 rounded-2xl w-full h-full border-none items-center justify-center'>
+                  <Compare
+                    firstImage='https://replicate.delivery/pbxt/KW7CdCusXMkkOs9bbCGYsInC8EUxlj3yBLxvfW9Fs9FFMZUL/MTk4MTczMTkzNzI1Mjg5NjYy.webp'
+                    secondImage='https://replicate.delivery/pbxt/fP9XisyvE60KY6mKBRyDHHhoC2eVfoGehEJ0fCSUHi3PGzpTC/ComfyUI_00001_.png'
+                    firstImageClassName='object-cover overflow-hidden'
+                    secondImageClassname='object-cover overflow-hidden'
+                    className='h-[500px] w-[500px]'
+                    slideMode='drag'
+                  />
+                </div>
+                <div className='md:hidden mt-5 bg-white/5 px-3 py-4 rounded-2xl w-full h-full border-none flex items-center justify-center'>
+                  <Compare
+                    firstImage='https://replicate.delivery/pbxt/KW7CdCusXMkkOs9bbCGYsInC8EUxlj3yBLxvfW9Fs9FFMZUL/MTk4MTczMTkzNzI1Mjg5NjYy.webp'
+                    secondImage='https://replicate.delivery/pbxt/fP9XisyvE60KY6mKBRyDHHhoC2eVfoGehEJ0fCSUHi3PGzpTC/ComfyUI_00001_.png'
+                    firstImageClassName='object-cover overflow-hidden'
+                    secondImageClassname='object-cover overflow-hidden'
+                    className='h-[320px] w-[310px]'
+                    slideMode='drag'
+                  />
+                </div>
               </div>
             </div>
           </div>
