@@ -1,86 +1,60 @@
-import { Container, Wrapper } from '@/components'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import SectionBadge from '@/components/ui/section-badge'
-import { pricingCards } from '@/constants'
-import { cn } from '@/lib/utils'
-import { Zap } from 'lucide-react'
-import Link from 'next/link'
-import React from 'react'
+'use client'
 
-const BuyCreditsPage = () => {
+import { useState, useEffect } from 'react'
+import { Card, CardContent, CardFooter } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import CreditDisplay from './components/credit-display'
+import CustomSlider from './components/custom-slider'
+import { useUserStore } from '@/stores/user-store'
+
+export default function PricingPage() {
+  const [price, setPrice] = useState(1)
+  const [credits, setCredits] = useState(10)
+  const { user } = useUserStore()
+
+  useEffect(() => {
+    // Calculate credits based on price
+    const wholeCredits = Math.floor(price) * 10
+    const fractionalCredits = price % 1 === 0.5 ? 5 : 0
+    setCredits(wholeCredits + fractionalCredits)
+  }, [price])
+
   return (
-    <section className='w-full relative flex flex-col items-center justify-center px-4 md:px-0 py-6'>
-      {/* Pricing */}
-      <Wrapper className='max-w-6xl flex flex-col items-center justify-center py-12 relative'>
-        <Container>
-          <div className='max-w-md md:mx-auto text-center'>
-            <SectionBadge title='Pricing' />
-            <p className='mt-4 text-lg font-semibold'>(Coming Soon)</p>
-            <h2 className='text-3xl lg:text-4xl font-semibold mt-6'>
-              Flexible Morphing, No strings Attached
-            </h2>
-            <p className='text-muted-foreground mt-6'>
-              Say goodbye to subscription traps. With credits system you pay as
-              you go.
+    <div className='min-h-screen bg-gradient-to-b from-primary/10 to-background flex flex-col items-center justify-center p-4 w-full'>
+      <div className='flex items-center justify-center flex-col mb-8'>
+        <h1 className='text-3xl md:text-5xl font-bold text-neutral-800 '>
+          Buy <span className='text-primary'>MorphMe</span> Credits
+        </h1>
+        <p className='text-base md:text-lg text-muted-foreground font-medium mt-5'>
+          You have <span className='text-primary'>{user?.credits} credits</span>
+          . Join hundereds of morphers by buying more below
+        </p>
+      </div>
+      <Card className='w-full max-w-2xl'>
+        <CardContent className='pt-6'>
+          <CreditDisplay credits={credits} />
+          <div className='text-center mb-6'>
+            <p className='text-3xl font-semibold text-foreground'>
+              ${price.toFixed(2)}
             </p>
           </div>
-        </Container>
-        <Container className='flex items-center justify-center'>
-          <div className='grid grid-cols-1 lg:grid-cols-3 gap-5 w-full md:gap-8 py-10 md:py-20 flex-wrap max-w-4xl'>
-            {pricingCards.map((card) => (
-              <Card
-                key={card.title}
-                className={cn(
-                  'flex flex-col w-full border-x-neutral-700',
-                  card.title == 'Unlimited Saas' && 'border-2 border-primary',
-                )}
-              >
-                <CardHeader className='border-2 border-border'>
-                  <span>{card.title}</span>
-                  <CardTitle
-                    className={cn(
-                      card.title !== 'Unlimited Saas' &&
-                        'text-muted-foreground',
-                    )}
-                  >
-                    {card.price}
-                  </CardTitle>
-                  <CardDescription>{card.description}</CardDescription>
-                </CardHeader>
-                <CardContent className='pt-6 space-y-3'>
-                  {card.features.map((feature) => (
-                    <div key={feature} className='flex items-center gap-2'>
-                      <Zap className='w-4 h-4 fill-primary text-primary' />
-                      <p className=''>{feature}</p>
-                    </div>
-                  ))}
-                </CardContent>
-                <CardFooter className='mt-auto w-full'>
-                  <Link
-                    href='#'
-                    className={cn(
-                      'w-full text-center text-primary-foreground bg-primary p-2 rounded-md text-sm font-medium',
-                      card.title !== 'Unlimited Saas' &&
-                        '!bg-foreground !text-background',
-                    )}
-                  >
-                    {card.buttonText}
-                  </Link>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
-        </Container>
-      </Wrapper>
-    </section>
+          <CustomSlider
+            min={1}
+            max={20}
+            step={0.5}
+            value={price}
+            onChange={(value) => setPrice(value)}
+          />
+        </CardContent>
+        <CardFooter className='flex justify-center'>
+          <Button
+            size='lg'
+            className='rounded-full transition-all duration-200'
+          >
+            Buy Now
+          </Button>
+        </CardFooter>
+      </Card>
+    </div>
   )
 }
-
-export default BuyCreditsPage
