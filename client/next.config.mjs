@@ -14,6 +14,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'replicate.delivery',
       },
+      {
+        protocol: 'https',
+        hostname: 'avatar.iran.liara.run',
+      },
     ],
   },
   reactStrictMode: false,

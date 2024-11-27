@@ -36,6 +36,36 @@ const MorphForm = () => {
 
   const disabled = user ? user.credits < 1 && true : false
 
+  const handleDownload = async () => {
+    if (!processedImageUrl) return
+
+    try {
+      const response = await fetch(processedImageUrl)
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `transformed-image-${Date.now()}.png`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      window.URL.revokeObjectURL(url)
+
+      toast({
+        title: 'Success',
+        description: 'Image downloaded successfully',
+        duration: 2000,
+      })
+    } catch (error) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Failed to download image',
+        duration: 2000,
+      })
+    }
+  }
+
   const handleUploadComplete = (url: string) => {
     setUploadedImageUrl(url)
   }
