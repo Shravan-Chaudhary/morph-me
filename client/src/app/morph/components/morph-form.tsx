@@ -12,11 +12,12 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { useUserStore } from '@/stores/user-store'
-import { Download, Share2 } from 'lucide-react'
+import { Download, Expand, Share2, User } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
 import Upload from './upload'
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 
 type Error = {
   error?: string
@@ -29,6 +30,7 @@ const MorphForm = () => {
   const [selectedStyle, setSelectedStyle] = useState<string>('')
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string>('')
   const [processedImageUrl, setProcessedImageUrl] = useState<string>('')
+  const [isOpen, setIsOpen] = useState(false)
   const { toast } = useToast()
   const { user, updateCredits } = useUserStore()
 
@@ -297,22 +299,60 @@ const MorphForm = () => {
               </div>
 
               <div className='w-full max-w-[400px] aspect-square relative rounded-2xl overflow-hidden bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800'>
-                <Image
-                  src={
-                    processedImageUrl ||
-                    'https://replicate.delivery/pbxt/XDe5oQQKRg0bdyAHjo2BOLAUtFDee1lfHQnL5Z4hANzWyO1JB/ComfyUI_00001_.png'
-                  }
-                  alt='Transformed image placeholder'
-                  fill
-                  className='object-cover'
-                />
+                {processedImageUrl ? (
+                  <>
+                    <Image
+                      src={processedImageUrl}
+                      alt='Transformed image'
+                      fill
+                      className='object-cover'
+                    />
+                    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+                      <DialogTrigger asChild>
+                        <Button
+                          variant='secondary'
+                          size='icon'
+                          className='absolute top-2 right-2 bg-white/80 hover:bg-white/90 dark:bg-black/80 dark:hover:bg-black/90'
+                        >
+                          <Expand className='h-4 w-4' />
+                          <span className='sr-only'>View full image</span>
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent
+                        className='max-w-3xl'
+                        aria-description='transformed-photo'
+                      >
+                        <Image
+                          src={processedImageUrl}
+                          alt='Transformed image full preview'
+                          width={1200}
+                          height={1200}
+                          className='w-full h-auto object-contain'
+                        />
+                      </DialogContent>
+                    </Dialog>
+                  </>
+                ) : (
+                  <div className='absolute inset-0 flex flex-col items-center justify-center gap-4'>
+                    <User className='h-16 w-16 text-zinc-400' />
+                    <p className='text-sm text-zinc-500 dark:text-zinc-400'>
+                      Transformed image will show here
+                    </p>
+                  </div>
+                )}
               </div>
               <div className='flex justify-center gap-4 mt-4'>
                 <Button variant='outline' size='sm' className='rounded-full'>
                   <Share2 className='h-4 w-4 mr-2' />
                   <span className=''>Share</span>
                 </Button>
-                <Button variant='outline' size='sm' className='rounded-full'>
+                <Button
+                  variant='outline'
+                  size='sm'
+                  className='rounded-full'
+                  onClick={handleDownload}
+                  disabled={!processedImageUrl}
+                >
                   <Download className='h-4 w-4 mr-2' />
                   <span className=''>Download</span>
                 </Button>
