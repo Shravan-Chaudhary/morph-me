@@ -15,7 +15,7 @@ import { useUserStore } from '@/stores/user-store'
 import { Download, Expand, Share2, User } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import Upload from './upload'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 
@@ -32,9 +32,50 @@ const MorphForm = () => {
   const [processedImageUrl, setProcessedImageUrl] = useState<string>('')
   const [isOpen, setIsOpen] = useState(false)
   const { toast } = useToast()
+  const imageContainerRef = useRef<HTMLDivElement>(null)
   const { user, updateCredits } = useUserStore()
 
   const disabled = user ? user.credits < 1 && true : false
+
+  const handleShare = async () => {
+    if (!processedImageUrl) return
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'My Transformed Image',
+          text: 'Check out my AI-transformed image!',
+          url: processedImageUrl,
+        })
+      } catch (error) {
+        if (error) {
+          toast({
+            variant: 'destructive',
+            title: 'Error',
+            description: 'Failed to share image',
+            duration: 2000,
+          })
+        }
+      }
+    } else {
+      // Fallback to copying link to clipboard
+      try {
+        await navigator.clipboard.writeText(processedImageUrl)
+        toast({
+          title: 'Success',
+          description: 'Image link copied to clipboard',
+          duration: 2000,
+        })
+      } catch (error) {
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: 'Failed to copy link',
+          duration: 2000,
+        })
+      }
+    }
+  }
 
   const handleDownload = async () => {
     if (!processedImageUrl) return
@@ -45,7 +86,7 @@ const MorphForm = () => {
       const url = window.URL.createObjectURL(blob)
       const link = document.createElement('a')
       link.href = url
-      link.download = `transformed-image-${Date.now()}.png`
+      link.download = `morph-me-image-${Date.now()}.png`
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
@@ -71,6 +112,19 @@ const MorphForm = () => {
   const handleTransform = async () => {
     if (!uploadedImageUrl || !selectedStyle) return
     setLoading(true)
+
+    // Add scroll behavior
+    if (window.innerWidth < 768 && imageContainerRef.current) {
+      setTimeout(() => {
+        // Get the Y position relative to the page
+        const yOffset = imageContainerRef.current?.offsetTop ?? 0
+        // Scroll with a small offset for better positioning
+        window.scrollTo({
+          top: yOffset - 50, // 50px offset from the top for better visibility
+          behavior: 'smooth',
+        })
+      }, 100)
+    }
 
     try {
       const res = await fetch(
@@ -182,7 +236,6 @@ const MorphForm = () => {
             }
             const userCredits: { credits: string } =
               await userCreditsResponse.json()
-            console.log('User credits:', userCredits)
             const credits = parseInt(userCredits.credits)
             // Update credits in the store
             updateCredits(credits)
@@ -257,6 +310,7 @@ const MorphForm = () => {
                 Upload your Photo or Selfie
               </h2>
               <Upload
+                isTransforming={loading}
                 onUploadComplete={handleUploadComplete}
                 onDelete={handleUploadDelete}
               />
@@ -285,9 +339,10 @@ const MorphForm = () => {
                     !uploadedImageUrl || !selectedStyle || loading || disabled
                   }
                 >
-                  <span className='text-base'>Transform</span>
-
-                  <Icons.sparkles className='size-5 ml-2' />
+                  <span className='text-base'>
+                    {loading ? 'Using 1 credit ...' : 'Transform'}
+                  </span>
+                  {!loading && <Icons.sparkles className='size-5 ml-2' />}
                 </Button>
               </Link>
               {user
@@ -322,12 +377,16 @@ const MorphForm = () => {
                 </p>
               </div>
 
-              <div className='w-full max-w-[400px] aspect-square relative rounded-2xl overflow-hidden bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800'>
-                {/* NEW: Added loading state check and SpellcastingLoader */}
+              <div
+                ref={imageContainerRef}
+                className='w-full max-w-[400px] aspect-square relative rounded-2xl overflow-hidden bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800'
+              >
                 {loading ? (
-                  // NEW: Added this entire div for the loading state
-                  <div className='absolute inset-0 backdrop-blur-sm bg-white/30 dark:bg-black/30 flex items-center justify-center'>
+                  <div className='absolute inset-0 backdrop-blur-sm bg-white/30 dark:bg-black/30 flex items-center justify-center flex-col gap-0'>
                     <SpellcastingLoader />
+                    <p className='text-sm text-zinc-600 dark:text-zinc-400 text-center px-4'>
+                      Transformation takes around 20-25 seconds, be patient!
+                    </p>
                   </div>
                 ) : processedImageUrl ? (
                   <>
@@ -372,7 +431,13 @@ const MorphForm = () => {
                 )}
               </div>
               <div className='flex justify-center gap-4 mt-4'>
-                <Button variant='outline' size='sm' className='rounded-full'>
+                <Button
+                  variant='outline'
+                  size='sm'
+                  className='rounded-full'
+                  onClick={handleShare}
+                  disabled={!processedImageUrl}
+                >
                   <Share2 className='h-4 w-4 mr-2' />
                   <span className=''>Share</span>
                 </Button>
