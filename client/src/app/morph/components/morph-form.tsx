@@ -1,5 +1,5 @@
 'use client'
-import { Container, Icons, Wrapper } from '@/components'
+import { Container, Icons, SpellcastingLoader, Wrapper } from '@/components'
 import { useToast } from '@/components/hooks/use-toast'
 import { Button } from '@/components/ui/button'
 import {
@@ -50,12 +50,6 @@ const MorphForm = () => {
       link.click()
       document.body.removeChild(link)
       window.URL.revokeObjectURL(url)
-
-      toast({
-        title: 'Success',
-        description: 'Image downloaded successfully',
-        duration: 2000,
-      })
     } catch (error) {
       toast({
         variant: 'destructive',
@@ -329,7 +323,13 @@ const MorphForm = () => {
               </div>
 
               <div className='w-full max-w-[400px] aspect-square relative rounded-2xl overflow-hidden bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800'>
-                {processedImageUrl ? (
+                {/* NEW: Added loading state check and SpellcastingLoader */}
+                {loading ? (
+                  // NEW: Added this entire div for the loading state
+                  <div className='absolute inset-0 backdrop-blur-sm bg-white/30 dark:bg-black/30 flex items-center justify-center'>
+                    <SpellcastingLoader />
+                  </div>
+                ) : processedImageUrl ? (
                   <>
                     <Image
                       src={processedImageUrl}
