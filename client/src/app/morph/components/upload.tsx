@@ -16,11 +16,16 @@ import Image from 'next/image'
 import { useState } from 'react'
 
 interface UploadProps {
+  isTransforming: boolean
   onUploadComplete: (url: string) => void
   onDelete: () => void
 }
 
-export default function Upload({ onUploadComplete, onDelete }: UploadProps) {
+export default function Upload({
+  isTransforming,
+  onUploadComplete,
+  onDelete,
+}: UploadProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
@@ -151,6 +156,7 @@ export default function Upload({ onUploadComplete, onDelete }: UploadProps) {
                     size='icon'
                     onClick={handleDelete}
                     className='size-7 text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100'
+                    disabled={isTransforming}
                   >
                     <Trash2 className='size-4' />
                   </Button>
