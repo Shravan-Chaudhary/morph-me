@@ -18,6 +18,9 @@ import Link from 'next/link'
 import { useRef, useState } from 'react'
 import Upload from './upload'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Label } from '@/components/ui/label'
 
 type Error = {
   error?: string
@@ -31,6 +34,7 @@ const MorphForm = () => {
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string>('')
   const [processedImageUrl, setProcessedImageUrl] = useState<string>('')
   const [isOpen, setIsOpen] = useState(false)
+  const [prompt, setPrompt] = useState<string>('')
   const { toast } = useToast()
   const imageContainerRef = useRef<HTMLDivElement>(null)
   const { user, updateCredits } = useUserStore()
@@ -138,6 +142,7 @@ const MorphForm = () => {
           body: JSON.stringify({
             image_url: uploadedImageUrl,
             style: selectedStyle,
+            prompt: prompt,
           }),
           credentials: 'include',
         },
@@ -315,21 +320,33 @@ const MorphForm = () => {
                 onDelete={handleUploadDelete}
               />
               {/* TODO: On lg screen use icons */}
-              <Select onValueChange={setSelectedStyle}>
-                <SelectTrigger className='w-full max-w-sm md:max-w-[300px] rounded-2xl'>
-                  <SelectValue placeholder='Select a Style' />
-                </SelectTrigger>
-                <SelectContent className='rounded-2xl'>
-                  <SelectGroup>
-                    <SelectLabel className='rounded-2xl'>Styles</SelectLabel>
-                    <SelectItem value='3D'>3D</SelectItem>
-                    <SelectItem value='Clay'>Clay</SelectItem>
-                    <SelectItem value='Video game'>Video Game</SelectItem>
-                    <SelectItem value='Pixels'>Pixels</SelectItem>
-                    <SelectItem value='Emoji'>Emoji</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+
+              <div className='w-full max-w-sm md:max-w-[300px]'>
+                <Select onValueChange={setSelectedStyle}>
+                  <SelectTrigger className='rounded-2xl'>
+                    <SelectValue placeholder='Select a Style' />
+                  </SelectTrigger>
+                  <SelectContent className='rounded-2xl'>
+                    <SelectGroup>
+                      <SelectLabel className='rounded-2xl'>Styles</SelectLabel>
+                      <SelectItem value='3D'>3D</SelectItem>
+                      <SelectItem value='Clay'>Clay</SelectItem>
+                      <SelectItem value='Video game'>Video Game</SelectItem>
+                      <SelectItem value='Pixels'>Pixels</SelectItem>
+                      <SelectItem value='Emoji'>Emoji</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className='w-full max-w-sm md:max-w-[300px] space-y-2'>
+                <Textarea
+                  id='prompt'
+                  placeholder='Enter optional prompt here...'
+                  className='min-h-[80px] rounded-xl resize-none'
+                  value={prompt}
+                  onChange={(e) => setPrompt(e.target.value)}
+                />
+              </div>
               <Link href='#' className='w-full text-center'>
                 <Button
                   onClick={handleTransform}
