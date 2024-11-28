@@ -19,10 +19,13 @@ export function TweetCard({ author, handle, content, image }: TweetCardProps) {
             <AvatarFallback>{author.slice(0, 2).toUpperCase()}</AvatarFallback>
           </Avatar>
           <div className='flex flex-col'>
-            <div className='flex items-center gap-1'>
-              <span className='font-semibold'>{author}</span>
-              <VerifiedIcon className='h-4 w-4 fill-blue-500 text-white' />
-              <span className='text-muted-foreground'>{handle}</span>
+            <div className='flex flex-col'>
+              <div className='w-full flex items-center gap-1'>
+                <span className='font-semibold'>{author}</span>
+                <VerifiedIcon className='h-4 w-4 fill-blue-500 text-white' />
+              </div>
+
+              <span className='text-sm text-muted-foreground'>{handle}</span>
             </div>
           </div>
         </div>

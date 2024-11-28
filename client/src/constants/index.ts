@@ -167,50 +167,58 @@ export const reviews = [
 export const tweetData = [
   {
     id: 1,
-    author: 'Dillion',
-    handle: '@dillionverma',
+    author: 'Akash',
+    handle: '@akash_creates',
     content:
-      'I built @reactjs + @tailwindcss components for you to do the same in hours',
+      'My gaming squad lost it when I showed up as a perfect Minecraft character! MorphMe is pure magic 🎮 #AImagic',
     image: '/placeholder.svg',
   },
   {
     id: 2,
-    author: 'Alice',
-    handle: '@alice',
+    author: 'Ayush',
+    handle: '@sengar_ayush',
     content:
-      'Just launched my new project! Excited to share it with everyone. #webdev #launch',
+      "Can't stop morphing! Started with one selfie, now I have a whole gallery of AI-transformed portraits ✨. #PhotoFun",
     image: '/placeholder.svg',
   },
   {
     id: 3,
-    author: 'Bob',
-    handle: '@bob',
+    author: 'Bharat',
+    handle: '@techilicious',
     content:
-      'The future of AI is here. What are your thoughts on the latest developments? #AI #tech',
+      'The clay filter turned me into a museum masterpiece! Super impressed with how fast it works 🎨',
     image: '/placeholder.svg',
   },
   {
     id: 4,
-    author: 'Charlie',
-    handle: '@charlie',
+    author: 'Nishkarsh',
+    handle: '@nishkarsh_k',
     content:
-      "Remote work has changed everything. How's it going for you? Share your experiences! #remotework",
+      'From selfie to emoji in seconds! Perfect for spicing up those work chats 😄',
     image: '/placeholder.svg',
   },
   {
     id: 5,
-    author: 'David',
-    handle: '@david',
+    author: 'Shubhanshu',
+    handle: '@shub',
     content:
-      'Just finished a 30-day coding challenge! Learned so much in the process. #100DaysOfCode',
+      'Made my whole team into superheroes for our meeting! Even the boss loved it 💫',
     image: '/placeholder.svg',
   },
   {
     id: 6,
-    author: 'Eve',
-    handle: '@eve',
+    author: 'Navya',
+    handle: '@lady_navya',
     content:
-      'Excited to speak at the upcoming tech conference! Who else is attending? #publicspeaking #techconf',
+      'These AI styles are amazing! Perfect for my creative portfolio ✨ #AIart',
+    image: '/placeholder.svg',
+  },
+  {
+    id: 7,
+    author: 'Alice',
+    handle: '@alice_in_tech',
+    content:
+      'One selfie, endless possibilities! Each transformation feels like magic ⭐',
     image: '/placeholder.svg',
   },
 ]
