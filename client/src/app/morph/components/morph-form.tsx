@@ -21,6 +21,7 @@ import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
+import { ExamplePrompts } from './prompt-modal'
 
 type Error = {
   error?: string
@@ -338,7 +339,10 @@ const MorphForm = () => {
                   </SelectContent>
                 </Select>
               </div>
-              <div className='w-full max-w-sm md:max-w-[300px] space-y-2'>
+              <div className='w-full max-w-sm md:max-w-[300px] space-y-0'>
+                <div className='flex items-center justify-end'>
+                  <ExamplePrompts />
+                </div>
                 <Textarea
                   id='prompt'
                   placeholder='Enter optional prompt here...'
