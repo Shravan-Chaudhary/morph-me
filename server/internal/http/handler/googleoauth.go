@@ -56,15 +56,15 @@ func (h *GoogleOAuthHandler) GoogleCallBackHandler(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	// TODO: Change these before deploying to production
+	c.SetSameSite(http.SameSiteNoneMode)
 	c.SetCookie(
 		"accessToken",
 		signedToken,
-		2592000, //  MaxAge (30 days)
-		"/",     // Path
-		"",      // Domain
-		true,    // Secure
-		true,    // HttpOnly
+		2592000,
+		"/",
+		"",   // walrus-app-gjm6r.ondigitalocean.app use this fro production
+		true, // Secure must be true for SameSite=None
+		true, // HttpOnly
 	)
 	c.JSON(http.StatusOK, gin.H{"success": "true", "message": "Successfully logged in"})
 }

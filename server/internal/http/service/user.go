@@ -14,13 +14,13 @@ type UserService struct {
 	userRespository respository.UserRespository
 }
 
-func NewUserService (userRespository respository.UserRespository) *UserService {
+func NewUserService(userRespository respository.UserRespository) *UserService {
 	return &UserService{
 		userRespository: userRespository,
 	}
 }
 
-func (s *UserService) CreateOrUpdateUser(ctx context.Context,userInfo map[string]interface{}) (*model.User, error) {
+func (s *UserService) CreateOrUpdateUser(ctx context.Context, userInfo map[string]interface{}) (*model.User, error) {
 	existingUser, err := s.userRespository.FindUserByEmail(ctx, userInfo["email"].(string))
 
 	// Create user if not exists
@@ -30,13 +30,13 @@ func (s *UserService) CreateOrUpdateUser(ctx context.Context,userInfo map[string
 			Email:     userInfo["email"].(string),
 			Name:      userInfo["name"].(string),
 			Role:      "customer",
-			Credits:   2,
+			Credits:   3,
 			GoogleID:  userInfo["id"].(string),
 			CreatedAt: time.Now(),
 			LastLogin: time.Now(),
 		}
 
-		 err := s.userRespository.CreateUser(ctx, &newUser)
+		err := s.userRespository.CreateUser(ctx, &newUser)
 		if err != nil {
 			return nil, err
 		}

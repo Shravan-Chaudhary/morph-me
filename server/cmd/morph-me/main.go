@@ -120,8 +120,6 @@ func main() {
 // 1. Type of photo to upload
 // 2. Example prompts
 // 3. Check for file type before uploading
-// 4. Wand animation and scroll down on mobile devices while loading on transfrom
-// 5. Share and download button
 
 // Production
 // 3. Production Database

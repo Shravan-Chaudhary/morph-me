@@ -18,6 +18,7 @@ import (
 type ProcessRequest struct {
 	ImageUrl string `json:"image_url" binding:"required"`
 	Style    string `json:"style" binding:"required"`
+	Prompt   string `json:"prompt"`
 }
 
 type PredictionHandler struct {
@@ -83,11 +84,15 @@ func (h *PredictionHandler) PredictionHandler(c *gin.Context) {
 			fmt.Println("binding request", err)
 			return nil, err
 		}
+		if req.Prompt == "" {
+			req.Prompt = "a person"
+		}
+		fmt.Println(req.ImageUrl, req.Style, req.Prompt)
 
 		input := replicate.PredictionInput{
 			"image":               req.ImageUrl,
 			"style":               req.Style,
-			"prompt":              "a person",
+			"prompt":              req.Prompt,
 			"negative_prompt":     "boring",
 			"prompt_strength":     4.5,
 			"denoising_strength":  1,

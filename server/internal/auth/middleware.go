@@ -14,10 +14,10 @@ func AuthMiddleware(jwtSecret string) gin.HandlerFunc {
 		//  Get the cookie set by Next.js
 		var token string
 		token, err := c.Cookie("accessToken")
-		slog.Debug("debug ", slog.String("token", token))
-		fmt.Println("token", token)
+		slog.Debug("debug: Found accessToken")
+		fmt.Println("Found accessToken")
 		if err != nil {
-			slog.Debug("Error getting accesstoken from cookie", err)
+			slog.Debug("Error getting accesstoken from cookie", slog.String("error", err.Error()))
 			fmt.Println("Error getting accesstoken from cookie", err)
 			authHeader := c.GetHeader("Authorization")
 			if authHeader == "" {
